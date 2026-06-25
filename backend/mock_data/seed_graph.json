@@ -1,0 +1,13 @@
+{
+  "nodes": [
+    { "id": "farmer_1", "label": "Farmer: Kamau", "group": "farmer", "title": "+254712345678" },
+    { "id": "coop_1", "label": "Coop: Green Valley", "group": "coop" },
+    { "id": "guarantor_1", "label": "Guarantor: Wanjiku", "group": "guarantor", "title": "+254722000111" },
+    { "id": "guarantor_2", "label": "Guarantor: Omondi", "group": "guarantor", "title": "+254733222333" }
+  ],
+  "edges": [
+    { "from": "farmer_1", "to": "coop_1", "label": "MEMBER_OF" },
+    { "from": "guarantor_1", "to": "farmer_1", "label": "VOUCHED_BY" },
+    { "from": "guarantor_2", "to": "farmer_1", "label": "VOUCHED_BY" }
+  ]
+}
