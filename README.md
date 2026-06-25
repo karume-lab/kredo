@@ -1,72 +1,36 @@
-# KREDO Prototype
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-KREDO is a relationship-based credit risk tool for agricultural SACCOs in Kenya. This monorepo contains both the FastAPI Python backend and the React (Vite) + Tailwind frontend.
+## Getting Started
 
-## Project Structure
+First, run the development server:
 
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
-kredo/
-├── backend/       # FastAPI application and AI agents
-└── frontend/      # React, Vite, and Tailwind CSS web application
-```
 
-## Prerequisites
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Node.js (v18+)
-- Python (3.9+)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Setup Instructions
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Environment Variables
+## Learn More
 
-Both the backend and frontend rely on environment variables. We have provided `.env.example` files in both directories.
+To learn more about Next.js, take a look at the following resources:
 
-1. **Backend**:
-   ```bash
-   cd backend
-   cp .env.example .env
-   ```
-   *Make sure to add your `FEATHERLESS_API_KEY` to `backend/.env`!*
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-2. **Frontend**:
-   ```bash
-   cd frontend
-   cp .env.example .env
-   ```
-   *(Defaults to connecting to `http://localhost:8000/api`)*
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### Backend Setup
+## Deploy on Vercel
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. (Optional but recommended) Create and activate a virtual environment.
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the development server:
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-## Usage
-
-Once both servers are running, navigate to `http://localhost:5173` in your browser. 
-You can test the application using the mock phone number: `+254712345678`.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
