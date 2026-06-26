@@ -1,4 +1,7 @@
 import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DecisionCard({
   brief,
@@ -9,26 +12,28 @@ export default function DecisionCard({
 }) {
   if (isLoading) {
     return (
-      <div className="bg-card text-card-foreground border border-border p-6 rounded-xl w-full animate-pulse">
-        <div className="flex items-center justify-between mb-4">
-          <div className="h-6 bg-muted rounded w-1/3"></div>
-          <div className="h-6 bg-muted rounded w-1/4"></div>
-        </div>
-        <div className="h-6 bg-muted rounded w-3/4 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-4 bg-muted rounded w-full"></div>
-          <div className="h-4 bg-muted rounded w-full"></div>
-          <div className="h-4 bg-muted rounded w-4/5"></div>
-        </div>
-      </div>
+      <Card className="w-full">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <Skeleton className="h-6 w-1/3" />
+          <Skeleton className="h-6 w-1/4 rounded-full" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-6 w-3/4 mb-4 mt-2" />
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (!brief) {
     return (
-      <div className="bg-card border border-border p-6 rounded-xl w-full min-h-40 flex items-center justify-center text-muted-foreground">
+      <Card className="w-full min-h-40 flex items-center justify-center text-muted-foreground p-6">
         Search for a farmer to see the Repayment Confidence Brief.
-      </div>
+      </Card>
     );
   }
 
@@ -39,8 +44,8 @@ export default function DecisionCard({
     !brief.toLowerCase().includes("high risk");
 
   return (
-    <div className="bg-card text-card-foreground border border-border p-6 rounded-xl w-full">
-      <div className="flex items-center justify-between mb-4">
+    <Card className="w-full">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div className="flex items-center gap-2">
           {/* Accent Color applied safely to technical metrics */}
           {isPositive ? (
@@ -55,23 +60,30 @@ export default function DecisionCard({
 
         {/* Secondary/Destructive applied as a badge background variant */}
         {isPositive ? (
-          <span className="bg-secondary/15 text-secondary text-xs font-medium px-2.5 py-1 rounded-full border border-secondary/20">
+          <Badge
+            variant="outline"
+            className="bg-secondary/15 text-secondary border-secondary/20 px-2.5 py-1"
+          >
             Low Risk Network
-          </span>
+          </Badge>
         ) : (
-          <span className="bg-destructive/15 text-destructive text-xs font-medium px-2.5 py-1 rounded-full border border-destructive/20">
+          <Badge
+            variant="outline"
+            className="bg-destructive/15 text-destructive border-destructive/20 px-2.5 py-1"
+          >
             High Risk Network
-          </span>
+          </Badge>
         )}
-      </div>
+      </CardHeader>
 
-      <h3 className="text-xl font-bold tracking-tight mb-2">
-        Farmer Assessment
-      </h3>
-
-      <p className="text-muted-foreground text-sm leading-relaxed mb-2">
-        {brief}
-      </p>
-    </div>
+      <CardContent>
+        <CardTitle className="text-xl font-bold tracking-tight mb-2">
+          Farmer Assessment
+        </CardTitle>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-2">
+          {brief}
+        </p>
+      </CardContent>
+    </Card>
   );
 }

@@ -3,7 +3,10 @@
 import axios, { isAxiosError } from "axios";
 import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { GraphData } from "@/lib/neo4j";
 import DecisionCard from "./DecisionCard";
@@ -57,9 +60,12 @@ export default function DashboardLayout() {
             <h1 className="text-xl font-bold text-foreground tracking-tight">
               KREDO
             </h1>
-            <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20">
+            <Badge
+              variant="outline"
+              className="ml-2 bg-primary/10 text-primary border-primary/20 font-medium"
+            >
               PROTOTYPE
-            </span>
+            </Badge>
           </div>
         </div>
       </header>
@@ -104,19 +110,26 @@ export default function DashboardLayout() {
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl flex items-center">
-            {error}
-          </div>
+          <Alert
+            variant="destructive"
+            className="mb-8 bg-destructive/10 border-destructive/20 text-destructive"
+          >
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
-              <h3 className="text-lg font-semibold text-foreground mb-4">
-                Trust Graph
-              </h3>
-              <TrustGraph graphData={data?.graph} />
-            </div>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-semibold text-foreground">
+                  Trust Graph
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <TrustGraph graphData={data?.graph} />
+              </CardContent>
+            </Card>
           </div>
           <div className="space-y-6">
             <DecisionCard
