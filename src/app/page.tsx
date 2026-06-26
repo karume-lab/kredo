@@ -67,37 +67,6 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </div>
-            {/* Telemetry Ticker */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-border/50 animate-in fade-in duration-700 delay-500">
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-foreground">
-                  104,291
-                </span>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-                  Nodes Traversed
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-foreground">14</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-                  Active Cooperatives
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-foreground">
-                  &lt;0.01%
-                </span>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-                  Traversal Failures
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-foreground">34ms</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-                  Avg Latency
-                </span>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -163,7 +132,7 @@ export default function LandingPage() {
             <span className="font-medium text-foreground">KREDO</span>
           </div>
           <p className="text-sm">
-            © {new Date().getFullYear()} Karume Lab. Prototype under active
+            &copy; {new Date().getFullYear()}
             development.
           </p>
         </div>
