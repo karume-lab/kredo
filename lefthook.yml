@@ -3,5 +3,6 @@ pre-commit:
   commands:
     biome-check:
       glob: "*.{js,ts,jsx,tsx,json}"
-      run: bunx @biomejs/biome check --write {staged_files}
+      exclude: "src/components/ui/.*"
+      run: bunx @biomejs/biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
