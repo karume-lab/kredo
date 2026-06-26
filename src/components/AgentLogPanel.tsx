@@ -13,8 +13,10 @@ const PIPELINE_STEPS = [
 
 export default function AgentLogPanel({
   isEvaluating,
+  activeStatus,
 }: {
   isEvaluating: boolean;
+  activeStatus: string;
 }) {
   const [activeStep, setActiveStep] = useState(-1);
   const [hasEvaluated, setHasEvaluated] = useState(false);
@@ -22,23 +24,28 @@ export default function AgentLogPanel({
   useEffect(() => {
     if (isEvaluating) {
       setHasEvaluated(true);
-      setActiveStep(0);
 
-      const timeouts = [
-        setTimeout(() => setActiveStep(1), 800),
-        setTimeout(() => setActiveStep(2), 1600),
-        setTimeout(() => setActiveStep(3), 2600),
-        setTimeout(() => setActiveStep(4), 4000), // All done
-      ];
-
-      return () => {
-        timeouts.forEach(clearTimeout);
-      };
+      switch (activeStatus) {
+        case "Ingestion":
+          setActiveStep(0);
+          break;
+        case "Consent":
+          setActiveStep(1);
+          break;
+        case "Scoring":
+          setActiveStep(2);
+          break;
+        case "Explanation":
+          setActiveStep(3);
+          break;
+        default:
+          break;
+      }
     } else if (hasEvaluated) {
       // If evaluating finished, fast-forward to final state to ensure visual completeness
       setActiveStep(4);
     }
-  }, [isEvaluating, hasEvaluated]);
+  }, [isEvaluating, activeStatus, hasEvaluated]);
 
   if (!isEvaluating && !hasEvaluated) {
     return null;

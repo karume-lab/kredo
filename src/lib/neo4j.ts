@@ -25,6 +25,10 @@ export class Neo4jConnection {
     }
   }
 
+  public getDriver(): Driver | undefined {
+    return this.driver;
+  }
+
   public async getGraphData(phoneNumber: string): Promise<GraphData> {
     const mockData = {
       nodes: [

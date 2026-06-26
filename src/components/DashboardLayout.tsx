@@ -1,6 +1,5 @@
 "use client";
 
-import axios, { isAxiosError } from "axios";
 import { Loader2, Search } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -33,32 +32,54 @@ export default function DashboardLayout() {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [data, setData] = useState<EvaluationData | null>(null);
   const [error, setError] = useState("");
+  const [activeStatus, setActiveStatus] = useState("");
 
-  const handleEvaluate = async (e: React.FormEvent) => {
+  const handleEvaluate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber) return;
 
     setIsEvaluating(true);
     setError("");
+    setData(null);
+    setActiveStatus("");
 
-    try {
-      const response = await axios.get(
-        `/api/evaluate/${encodeURIComponent(phoneNumber)}`,
-      );
-      setData(response.data);
-    } catch (err: unknown) {
-      if (isAxiosError(err)) {
-        setError(
-          err.response?.data?.error ||
-            "Failed to evaluate farmer. Please check the backend connection.",
-        );
-      } else {
-        setError("Failed to evaluate farmer.");
+    const eventSource = new EventSource(
+      `/api/evaluate/${encodeURIComponent(phoneNumber)}`,
+    );
+
+    eventSource.addEventListener("status", (event) => {
+      setActiveStatus(event.data);
+    });
+
+    eventSource.addEventListener("result", (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+        setData(payload);
+      } catch (err) {
+        console.error("Failed to parse result payload", err);
       }
-      console.error(err);
-    } finally {
+      eventSource.close();
       setIsEvaluating(false);
-    }
+    });
+
+    eventSource.addEventListener("error", (event: MessageEvent) => {
+      if (event.data) {
+        try {
+          const errPayload = JSON.parse(event.data);
+          setError(
+            errPayload.error ||
+              errPayload.message ||
+              "Failed to evaluate farmer.",
+          );
+        } catch {
+          setError("Failed to evaluate farmer. Stream error.");
+        }
+      } else {
+        setError("Failed to connect to evaluation stream.");
+      }
+      eventSource.close();
+      setIsEvaluating(false);
+    });
   };
 
   return (
@@ -147,8 +168,12 @@ export default function DashboardLayout() {
               </CardContent>
             </Card>
           </div>
-          <div className="space-y-6">
-            <AgentLogPanel isEvaluating={isEvaluating} />
+          {/* Telemetry and Action Panel */}
+          <div className="space-y-6 flex flex-col items-center">
+            <AgentLogPanel
+              isEvaluating={isEvaluating}
+              activeStatus={activeStatus}
+            />
             {(!isEvaluating || data) && (
               <DecisionCard
                 brief={data?.repayment_confidence_brief}
