@@ -1,5 +1,6 @@
 import { ArrowRight, Database, Network, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import SiteLogo from "@/components/SiteLogo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,9 +16,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/70 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold tracking-wider shadow-sm group-hover:scale-105 transition-transform">
-              KR
-            </div>
+            <SiteLogo className="rounded-lg shadow-sm group-hover:scale-105 transition-transform" />
             <span className="text-xl font-bold text-slate-900 tracking-tight">
               KREDO
             </span>
@@ -36,9 +35,9 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="relative overflow-hidden pt-24 pb-32">
           {/* Decorative background gradients */}
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100/50 via-slate-50 to-slate-50"></div>
-          <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-emerald-100/30 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
-          <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-100/50 via-slate-50 to-slate-50"></div>
+          <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-200 h-200 bg-emerald-100/30 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
+          <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-150 h-150 bg-blue-100/40 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
 
           <div className="max-w-5xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -51,7 +50,7 @@ export default function LandingPage() {
 
             <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
               Unlock the Power of <br className="hidden md:block" />
-              <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
                 Social Collateral.
               </span>
             </h1>
@@ -153,9 +152,7 @@ export default function LandingPage() {
       <footer className="bg-slate-900 text-slate-400 py-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-slate-800 rounded flex items-center justify-center text-slate-300 font-bold text-xs tracking-wider">
-              KR
-            </div>
+            <SiteLogo size={24} className="rounded" />
             <span className="font-medium text-slate-300">KREDO</span>
           </div>
           <p className="text-sm">
