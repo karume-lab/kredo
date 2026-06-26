@@ -54,6 +54,13 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto bg-background hover:bg-muted text-foreground border-border text-base h-12 px-8 transition-all"
+              >
+                Learn More
+              </Button>
               <Link href="/dashboard">
                 <Button
                   size="lg"
@@ -63,13 +70,6 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto bg-background hover:bg-muted text-foreground border-border text-base h-12 px-8 transition-all"
-              >
-                Learn More
-              </Button>
             </div>
           </div>
         </section>
