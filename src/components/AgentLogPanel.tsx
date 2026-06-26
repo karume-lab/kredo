@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const PIPELINE_STEPS = [
-  "[Ingestion Agent] Reading external transaction ledgers & verifying identity...",
-  "[Consent Check] Verifying SMS opt-in status and consent log...",
-  "[Scoring Agent] Traversing Neo4j community paths and social collateral...",
-  "[Explanation Agent] Distilling query pathways into Featherless (Llama-3-8B)...",
+  "Verifying identity and reading transaction history...",
+  "Checking consent and SMS opt-in status...",
+  "Analyzing community network and social connections...",
+  "Generating clear explanations and insights...",
 ];
 
 export default function AgentLogPanel({
@@ -17,9 +17,11 @@ export default function AgentLogPanel({
   isEvaluating: boolean;
 }) {
   const [activeStep, setActiveStep] = useState(-1);
+  const [hasEvaluated, setHasEvaluated] = useState(false);
 
   useEffect(() => {
     if (isEvaluating) {
+      setHasEvaluated(true);
       setActiveStep(0);
 
       const timeouts = [
@@ -32,13 +34,13 @@ export default function AgentLogPanel({
       return () => {
         timeouts.forEach(clearTimeout);
       };
-    } else {
-      // If evaluating finished, make sure all are checked or reset if data cleared
-      setActiveStep(-1);
+    } else if (hasEvaluated) {
+      // If evaluating finished, fast-forward to final state to ensure visual completeness
+      setActiveStep(4);
     }
-  }, [isEvaluating]);
+  }, [isEvaluating, hasEvaluated]);
 
-  if (!isEvaluating && activeStep === -1) {
+  if (!isEvaluating && !hasEvaluated) {
     return null;
   }
 

@@ -96,11 +96,15 @@ export class Neo4jConnection {
       let coopName = "Unknown";
       let guarantorCount = 0;
 
+      const getSafeId = (id: unknown) =>
+        neo4j.isInt(id) ? id.toString() : String(id);
+
       for (const record of result.records) {
         const f = record.get("f");
         if (f) {
-          nodesMap.set(f.identity.toString(), {
-            id: f.identity.toString(),
+          const id = getSafeId(f.identity);
+          nodesMap.set(id, {
+            id,
             label: `Farmer: ${f.properties.name || "Unknown"}`,
             group: "farmer",
             title: f.properties.phone,
@@ -109,8 +113,9 @@ export class Neo4jConnection {
 
         const c = record.get("c");
         if (c) {
-          nodesMap.set(c.identity.toString(), {
-            id: c.identity.toString(),
+          const id = getSafeId(c.identity);
+          nodesMap.set(id, {
+            id,
             label: `Coop: ${c.properties.name || "Unknown"}`,
             group: "coop",
           });
@@ -119,8 +124,9 @@ export class Neo4jConnection {
 
         const g = record.get("g");
         if (g) {
-          nodesMap.set(g.identity.toString(), {
-            id: g.identity.toString(),
+          const id = getSafeId(g.identity);
+          nodesMap.set(id, {
+            id,
             label: `Guarantor: ${g.properties.name || "Unknown"}`,
             group: "guarantor",
             title: g.properties.phone,
@@ -130,8 +136,9 @@ export class Neo4jConnection {
 
         const a = record.get("a");
         if (a) {
-          nodesMap.set(a.identity.toString(), {
-            id: a.identity.toString(),
+          const id = getSafeId(a.identity);
+          nodesMap.set(id, {
+            id,
             label: `Agrovet: ${a.properties.name || "Unknown"}`,
             group: "agrovet",
           });
@@ -139,30 +146,33 @@ export class Neo4jConnection {
 
         const r1 = record.get("r1");
         if (r1) {
-          edgesMap.set(r1.identity.toString(), {
-            id: r1.identity.toString(),
-            from: r1.start.toString(),
-            to: r1.end.toString(),
+          const id = getSafeId(r1.identity);
+          edgesMap.set(id, {
+            id,
+            from: getSafeId(r1.start),
+            to: getSafeId(r1.end),
             label: r1.type,
           });
         }
 
         const r2 = record.get("r2");
         if (r2) {
-          edgesMap.set(r2.identity.toString(), {
-            id: r2.identity.toString(),
-            from: r2.start.toString(),
-            to: r2.end.toString(),
+          const id = getSafeId(r2.identity);
+          edgesMap.set(id, {
+            id,
+            from: getSafeId(r2.start),
+            to: getSafeId(r2.end),
             label: r2.type,
           });
         }
 
         const r3 = record.get("r3");
         if (r3) {
-          edgesMap.set(r3.identity.toString(), {
-            id: r3.identity.toString(),
-            from: r3.start.toString(),
-            to: r3.end.toString(),
+          const id = getSafeId(r3.identity);
+          edgesMap.set(id, {
+            id,
+            from: getSafeId(r3.start),
+            to: getSafeId(r3.end),
             label: r3.type,
           });
         }

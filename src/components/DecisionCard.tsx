@@ -70,8 +70,16 @@ export default function DecisionCard({
     !brief.toLowerCase().includes("high risk");
 
   const handleCopySMS = async () => {
-    const coopName = metrics?.cooperative?.split(" -")[0] || "Cooperative";
-    const guarantors = metrics?.guarantors?.split(" ")[0] || "0";
+    const cooperativeRaw = metrics?.cooperative ?? "";
+    const coopName = cooperativeRaw.includes(" -")
+      ? cooperativeRaw.split(" -")[0]
+      : cooperativeRaw || "No Active Cooperative Linked";
+
+    const guarantorsRaw = metrics?.guarantors ?? "";
+    const guarantors = guarantorsRaw.includes(" ")
+      ? guarantorsRaw.split(" ")[0]
+      : guarantorsRaw || "0";
+
     const smsText = `KREDO: Farmer approved for financing. Underwritten via ${coopName} & ${guarantors} peer backers.`;
 
     try {
