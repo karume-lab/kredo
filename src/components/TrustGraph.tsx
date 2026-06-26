@@ -57,9 +57,9 @@ export default function TrustGraph({ graphData }: { graphData?: GraphData }) {
   }, [graphData]);
 
   return (
-    <div className="w-full h-full min-h-100 border border-gray-200 rounded-lg bg-white relative">
+    <div className="w-full h-full min-h-100 border border-border rounded-lg bg-card relative overflow-hidden">
       {!graphData && (
-        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
           No graph data available
         </div>
       )}

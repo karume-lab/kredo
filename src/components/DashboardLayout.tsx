@@ -49,15 +49,15 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-background flex flex-col font-sans">
+      <header className="bg-card border-b border-border sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <SiteLogo className="rounded" />
-            <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+            <h1 className="text-xl font-bold text-foreground tracking-tight">
               KREDO
             </h1>
-            <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+            <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20">
               PROTOTYPE
             </span>
           </div>
@@ -66,30 +66,30 @@ export default function DashboardLayout() {
 
       <main className="flex-1 max-w-7xl mx-auto px-6 py-8 w-full">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-2xl font-semibold text-foreground mb-2">
             Farmer Evaluation
           </h2>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Analyze relationship-based credit risk for agricultural SACCOs.
           </p>
         </div>
 
-        <div className="bg-white p-2 rounded-xl shadow-sm border border-gray-200 mb-8 max-w-2xl">
+        <div className="bg-card p-2 rounded-xl shadow-sm border border-border mb-8 max-w-2xl">
           <form onSubmit={handleEvaluate} className="flex items-center gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter farmer phone number (e.g., +254...)"
-                className="w-full pl-10 bg-gray-50 border-transparent focus-visible:bg-white focus-visible:ring-blue-500"
+                className="w-full pl-10 bg-background border-transparent focus-visible:bg-background focus-visible:ring-ring"
               />
             </div>
             <Button
               type="submit"
               disabled={isEvaluating}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {isEvaluating ? (
                 <>
@@ -104,15 +104,15 @@ export default function DashboardLayout() {
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
+          <div className="mb-8 p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl flex items-center">
             {error}
           </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
                 Trust Graph
               </h3>
               <TrustGraph graphData={data?.graph} />
