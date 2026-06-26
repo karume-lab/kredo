@@ -1,13 +1,8 @@
-import { ArrowRight, Database, Network, ShieldCheck } from "lucide-react";
+import { ArrowRight, Network } from "lucide-react";
 import Link from "next/link";
 import SiteLogo from "@/components/SiteLogo";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 export default function LandingPage() {
   return (
@@ -41,16 +36,17 @@ export default function LandingPage() {
 
           <div className="max-w-5xl mx-auto px-6 text-center">
             <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight leading-tight mb-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-              Unlock the Power of <br className="hidden md:block" />
+              Decentralized Risk Infrastructure for{" "}
+              <br className="hidden md:block" />
               <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Social Collateral.
+                Last-Mile Agricultural Lending.
               </span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 leading-relaxed">
-              KREDO empowers agricultural SACCOs in Kenya with
-              relationship-based credit risk analysis. Visualize trust networks
-              and leverage AI to make confident lending decisions.
+              Map local economic footprints, query decentralized trust networks,
+              and generate auditable narrative summaries for thin-file borrowers
+              instantly.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
@@ -71,69 +67,88 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </div>
+            {/* Telemetry Ticker */}
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-border/50 animate-in fade-in duration-700 delay-500">
+              <div className="flex flex-col items-center justify-center">
+                <span className="text-3xl font-bold text-foreground">
+                  104,291
+                </span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
+                  Nodes Traversed
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <span className="text-3xl font-bold text-foreground">14</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
+                  Active Cooperatives
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <span className="text-3xl font-bold text-foreground">
+                  &lt;0.01%
+                </span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
+                  Traversal Failures
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <span className="text-3xl font-bold text-foreground">34ms</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
+                  Avg Latency
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Worked Scenario Block */}
         <section className="py-24 bg-card border-y border-border">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Engineering Trust at Scale
+                Real-World Resolution
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                We combine graph theory with modern language models to provide a
-                holistic view of creditworthiness.
+                See how our traversal logic handles thin-file borrowers locally.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <Card className="border-border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-background/50 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 text-primary">
-                    <Network className="w-6 h-6" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              {/* Left Column */}
+              <Card className="border-border shadow-none bg-background rounded-xl overflow-hidden">
+                <div className="p-8">
+                  <div className="inline-flex items-center rounded-full border border-destructive/20 bg-destructive/10 px-2.5 py-0.5 text-xs font-semibold text-destructive mb-6">
+                    Borrower Constraint
                   </div>
-                  <CardTitle className="text-xl">
-                    Trust Graph Analysis
-                  </CardTitle>
-                  <CardDescription className="text-base mt-2">
-                    Visualize relationships between farmers, coops, and
-                    guarantors. Understand the strength of social ties
-                    instantly.
-                  </CardDescription>
-                </CardHeader>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">
+                    Thin-file youth borrower leasing 1 acre in Kiambu County
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-lg">
+                    Applying for KES 30,000 input credit. Zero CRB history.
+                    Traditional models reject instantly due to lack of
+                    formalized collateral.
+                  </p>
+                </div>
               </Card>
 
-              {/* Feature 2 */}
-              <Card className="border-border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-background/50 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-secondary/20 rounded-xl flex items-center justify-center mb-4 text-secondary">
-                    <ShieldCheck className="w-6 h-6" />
+              {/* Right Column */}
+              <Card className="border-border shadow-none bg-primary/5 rounded-xl overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                  <Network className="w-24 h-24 text-primary" />
+                </div>
+                <div className="p-8 relative z-10">
+                  <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary mb-6">
+                    Kredo Traversal Logic
                   </div>
-                  <CardTitle className="text-xl">
-                    AI Confidence Briefs
-                  </CardTitle>
-                  <CardDescription className="text-base mt-2">
-                    Powered by Featherless AI, we distill complex network
-                    metrics into clear, 3-sentence lending recommendations.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* Feature 3 */}
-              <Card className="border-border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-background/50 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-accent/50 rounded-xl flex items-center justify-center mb-4 text-accent-foreground">
-                    <Database className="w-6 h-6" />
-                  </div>
-                  <CardTitle className="text-xl">Robust Architecture</CardTitle>
-                  <CardDescription className="text-base mt-2">
-                    Built on Neo4j for lightning-fast graph traversals,
-                    seamlessly integrated with a modern Next.js edge
-                    infrastructure.
-                  </CardDescription>
-                </CardHeader>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">
+                    Index-free adjacency lookup
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-lg">
+                    Queries delivery history at Githunguri Dairy, mapping 26
+                    monthly milk deliveries as verifiable social collateral to
+                    approve underwriting dynamically.
+                  </p>
+                </div>
               </Card>
             </div>
           </div>

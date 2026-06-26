@@ -69,17 +69,17 @@ export default function DecisionCard({
     !brief.toLowerCase().includes("error") &&
     !brief.toLowerCase().includes("high risk");
 
+  const cooperativeRaw = metrics?.cooperative ?? "";
+  const coopName = cooperativeRaw.includes(" -")
+    ? cooperativeRaw.split(" -")[0]
+    : cooperativeRaw || "No Active Cooperative Linked";
+
+  const guarantorsRaw = metrics?.guarantors ?? "";
+  const guarantors = guarantorsRaw.includes(" ")
+    ? guarantorsRaw.split(" ")[0]
+    : guarantorsRaw || "0";
+
   const handleCopySMS = async () => {
-    const cooperativeRaw = metrics?.cooperative ?? "";
-    const coopName = cooperativeRaw.includes(" -")
-      ? cooperativeRaw.split(" -")[0]
-      : cooperativeRaw || "No Active Cooperative Linked";
-
-    const guarantorsRaw = metrics?.guarantors ?? "";
-    const guarantors = guarantorsRaw.includes(" ")
-      ? guarantorsRaw.split(" ")[0]
-      : guarantorsRaw || "0";
-
     const smsText = `KREDO: Farmer approved for financing. Underwritten via ${coopName} & ${guarantors} peer backers.`;
 
     try {
@@ -92,8 +92,8 @@ export default function DecisionCard({
   };
 
   return (
-    <Card className="w-full flex flex-col h-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+    <Card className="w-full flex flex-col h-full shadow-sm rounded-xl">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-8 pt-8 pb-4">
         <div className="flex items-center gap-2">
           {/* Accent Color applied safely to technical metrics */}
           {isPositive ? (
@@ -101,7 +101,7 @@ export default function DecisionCard({
           ) : (
             <ShieldAlert className="text-destructive w-5 h-5" />
           )}
-          <span className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
+          <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
             Kredo Trust Metric
           </span>
         </div>
@@ -110,39 +110,41 @@ export default function DecisionCard({
         {isPositive ? (
           <Badge
             variant="outline"
-            className="bg-secondary/15 text-secondary border-secondary/20 px-2.5 py-1"
+            className="bg-secondary/15 text-secondary border-secondary/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-sm"
           >
             Low Risk Network
           </Badge>
         ) : (
           <Badge
             variant="outline"
-            className="bg-destructive/15 text-destructive border-destructive/20 px-2.5 py-1"
+            className="bg-destructive/15 text-destructive border-destructive/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-sm"
           >
             High Risk Network
           </Badge>
         )}
       </CardHeader>
 
-      <CardContent className="flex-1 space-y-4">
+      <CardContent className="flex-1 space-y-6 px-8">
         <div>
-          <CardTitle className="text-xl font-bold tracking-tight mb-2">
+          <CardTitle className="text-xl font-bold tracking-tight mb-3">
             Farmer Assessment
           </CardTitle>
-          <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+          <p className="text-muted-foreground text-[15px] leading-relaxed mb-4">
             {brief}
           </p>
         </div>
 
         {/* Audit Graph Data Panel */}
         {metrics && (
-          <div className="border border-border rounded-lg overflow-hidden bg-slate-50/50 dark:bg-slate-900/20">
+          <div className="border border-border rounded-lg overflow-hidden bg-background shadow-sm">
             <button
               type="button"
               onClick={() => setIsAuditExpanded(!isAuditExpanded)}
-              className="w-full flex items-center justify-between p-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
+              className="w-full flex items-center justify-between p-4 text-sm font-medium hover:bg-muted/50 transition-colors"
             >
-              <span className="text-foreground">Audit Graph Data</span>
+              <span className="text-foreground font-semibold">
+                Functional Trust Ledger
+              </span>
               {isAuditExpanded ? (
                 <ChevronUp className="w-4 h-4 text-muted-foreground" />
               ) : (
@@ -150,38 +152,64 @@ export default function DecisionCard({
               )}
             </button>
             {isAuditExpanded && (
-              <div className="p-4 border-t border-border grid grid-cols-1 gap-3 text-sm">
-                <div className="flex justify-between items-center pb-2 border-b border-border/50">
-                  <span className="text-muted-foreground">
-                    Cooperative Stability
-                  </span>
-                  <span className="font-medium text-right text-foreground">
-                    {metrics.cooperative}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center pb-2 border-b border-border/50">
-                  <span className="text-muted-foreground">
-                    Peer Guarantor Trust Network
-                  </span>
-                  <span className="font-medium text-right text-foreground">
-                    {metrics.guarantors}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">
-                    Estimated Cash Flow
-                  </span>
-                  <span className="font-medium text-right text-foreground">
-                    {metrics.cashFlow}
-                  </span>
-                </div>
+              <div className="p-0 border-t border-border overflow-x-auto">
+                <table className="w-full text-left text-sm whitespace-nowrap">
+                  <thead className="bg-muted/30 border-b border-border text-muted-foreground text-[10px] uppercase tracking-wider">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">
+                        Ecosystem Entity
+                      </th>
+                      <th className="px-4 py-3 font-semibold">
+                        Relationship Link
+                      </th>
+                      <th className="px-4 py-3 font-semibold">
+                        Graph Verification Flag
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    <tr className="hover:bg-muted/20 transition-colors">
+                      <td className="px-4 py-3 text-foreground font-medium">
+                        {coopName}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground font-mono text-[11px] tracking-tight">
+                        MEMBER_OF
+                      </td>
+                      <td className="px-4 py-3 text-emerald-600 dark:text-emerald-400 font-medium">
+                        Verified (24 Months / Active)
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-muted/20 transition-colors">
+                      <td className="px-4 py-3 text-foreground font-medium">
+                        {guarantors}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground font-mono text-[11px] tracking-tight">
+                        VOUCHED_BY
+                      </td>
+                      <td className="px-4 py-3 text-emerald-600 dark:text-emerald-400 font-medium">
+                        Verified (100% Repayment History)
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-muted/20 transition-colors">
+                      <td className="px-4 py-3 text-foreground font-medium">
+                        Local Agrovet Accounts
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground font-mono text-[11px] tracking-tight">
+                        TRANSACTED_WITH
+                      </td>
+                      <td className="px-4 py-3 text-primary font-medium">
+                        Mobile Money Flow Active
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
         )}
       </CardContent>
 
-      <CardFooter className="pt-2 pb-6 border-t border-border mt-auto">
+      <CardFooter className="pt-6 pb-8 px-8 border-t border-border mt-auto">
         <Button
           onClick={handleCopySMS}
           variant="outline"

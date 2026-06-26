@@ -5,7 +5,6 @@ import { Loader2, Search } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -71,18 +70,12 @@ export default function DashboardLayout() {
             <h1 className="text-xl font-bold text-foreground tracking-tight">
               KREDO
             </h1>
-            <Badge
-              variant="outline"
-              className="ml-2 bg-primary/10 text-primary border-primary/20 font-medium"
-            >
-              PROTOTYPE
-            </Badge>
           </div>
         </div>
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-6 py-8 w-full">
-        <div className="mb-8">
+        <div className="mb-6">
           <h2 className="text-2xl font-semibold text-foreground mb-2">
             Farmer Evaluation
           </h2>
@@ -91,22 +84,34 @@ export default function DashboardLayout() {
           </p>
         </div>
 
-        <div className="bg-card p-2 rounded-xl shadow-sm border border-border mb-8 max-w-2xl">
-          <form onSubmit={handleEvaluate} className="flex items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        {/* Session Header Badge Context */}
+        <div className="mb-6 flex items-center bg-card border border-border rounded-lg px-4 py-2.5 w-fit text-sm text-muted-foreground shadow-sm">
+          <span className="font-medium text-foreground mr-2">SACCO:</span>{" "}
+          Kiambu Rural Credit Unit
+          <span className="mx-3 text-border">|</span>
+          <span className="font-medium text-foreground mr-2">Officer:</span>{" "}
+          Wanjiku Njeri
+          <span className="mx-3 text-border">|</span>
+          <span className="font-medium text-foreground mr-2">System Node:</span>{" "}
+          Node-04-AuraDB
+        </div>
+
+        <div className="mb-8 max-w-2xl">
+          <form onSubmit={handleEvaluate} className="flex items-center gap-3">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input
                 type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter farmer phone number (e.g., +254...)"
-                className="w-full pl-10 bg-background border-transparent focus-visible:bg-background focus-visible:ring-ring"
+                className="w-full pl-12 bg-card border border-border focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm h-12 text-base rounded-xl transition-all"
               />
             </div>
             <Button
               type="submit"
               disabled={isEvaluating}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 rounded-xl shadow-sm font-medium"
             >
               {isEvaluating ? (
                 <>

@@ -45,14 +45,14 @@ export default function AgentLogPanel({
   }
 
   return (
-    <Card className="w-full bg-slate-950 text-slate-50 border-slate-800 shadow-inner font-mono text-xs sm:text-sm">
-      <CardHeader className="pb-2 border-b border-slate-800 bg-slate-900/50">
-        <CardTitle className="flex items-center gap-2 text-slate-300 text-sm">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          Multi-Agent Pipeline Telemetry
+    <Card className="w-full shadow-sm rounded-xl">
+      <CardHeader className="px-8 pt-8 pb-4">
+        <CardTitle className="flex items-center gap-2 text-foreground font-bold text-lg tracking-tight">
+          <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+          Pipeline Telemetry
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-4 space-y-3 min-h-40">
+      <CardContent className="px-8 pb-8 space-y-4 min-h-40">
         {PIPELINE_STEPS.map((step, index) => {
           const isCompleted = activeStep > index;
           const isActive = activeStep === index && isEvaluating;
@@ -62,25 +62,25 @@ export default function AgentLogPanel({
             <div
               key={step}
               className={`flex items-start gap-3 transition-opacity duration-300 ${
-                isPending ? "opacity-30" : "opacity-100"
+                isPending ? "opacity-40" : "opacity-100"
               }`}
             >
               <div className="mt-0.5 shrink-0">
                 {isCompleted ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
                 ) : isActive ? (
-                  <Loader2 className="w-4 h-4 text-sky-400 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-primary animate-spin" />
                 ) : (
-                  <div className="w-4 h-4 rounded-full border border-slate-700" />
+                  <div className="w-4 h-4 rounded-full border border-border" />
                 )}
               </div>
               <span
-                className={`leading-relaxed ${
+                className={`leading-relaxed text-[15px] ${
                   isCompleted
-                    ? "text-slate-400"
+                    ? "text-muted-foreground"
                     : isActive
-                      ? "text-sky-100"
-                      : "text-slate-600"
+                      ? "text-foreground font-medium"
+                      : "text-muted-foreground"
                 }`}
               >
                 {step}

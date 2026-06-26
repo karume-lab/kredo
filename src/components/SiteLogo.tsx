@@ -12,7 +12,13 @@ export default function SiteLogo({ className, size = 32 }: SiteLogoProps) {
       className={cn("relative overflow-hidden shrink-0", className)}
       style={{ width: size, height: size }}
     >
-      <Image src="/logo.png" alt="KREDO Logo" fill className="object-contain" />
+      <Image
+        src="/logo.png"
+        alt="KREDO Logo"
+        fill
+        sizes={`${size}px`}
+        className="object-contain"
+      />
     </div>
   );
 }
