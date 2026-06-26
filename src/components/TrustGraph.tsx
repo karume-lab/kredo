@@ -11,6 +11,25 @@ export default function TrustGraph({ graphData }: { graphData?: GraphData }) {
   useEffect(() => {
     if (!containerRef.current || !graphData?.nodes) return;
 
+    // Helper to get CSS variable value
+    const getCssVar = (name: string, fallback: string) => {
+      if (typeof window !== "undefined") {
+        const value = getComputedStyle(document.documentElement)
+          .getPropertyValue(name)
+          .trim();
+        return value || fallback;
+      }
+      return fallback;
+    };
+
+    const primaryColor = getCssVar("--primary", "hsl(200 35% 41%)");
+    const secondaryColor = getCssVar("--secondary", "hsl(126 39% 63%)");
+    const guarantorColor = getCssVar("--chart-4", "hsl(43 74% 66%)"); // Soft orange/amber
+    const mutedForeground = getCssVar(
+      "--muted-foreground",
+      "hsl(215.4 16.3% 46.9%)",
+    );
+
     // Map data for vis-network
     const data = {
       nodes: graphData.nodes.map((node) => ({
@@ -20,23 +39,25 @@ export default function TrustGraph({ graphData }: { graphData?: GraphData }) {
         group: node.group,
         shape: node.group === "farmer" ? "diamond" : "dot",
         size: node.group === "farmer" ? 30 : 20,
-        font: { size: 14, color: "#374151" },
+        font: { size: 14, color: mutedForeground }, // Use muted foreground
       })),
       edges: graphData.edges.map((edge) => ({
         from: edge.from,
         to: edge.to,
         label: edge.label,
-        font: { align: "middle", size: 12, color: "#6B7280" },
+        font: { align: "middle", size: 12, color: mutedForeground },
         arrows: "to",
-        color: { color: "#9CA3AF" },
+        color: { color: mutedForeground },
       })),
     };
 
     const options = {
       groups: {
-        farmer: { color: { background: "#3B82F6", border: "#2563EB" } },
-        coop: { color: { background: "#10B981", border: "#059669" } },
-        guarantor: { color: { background: "#F59E0B", border: "#D97706" } },
+        farmer: { color: { background: primaryColor, border: primaryColor } },
+        coop: { color: { background: secondaryColor, border: secondaryColor } },
+        guarantor: {
+          color: { background: guarantorColor, border: guarantorColor },
+        },
       },
       physics: {
         barnesHut: {

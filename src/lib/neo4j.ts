@@ -3,6 +3,11 @@
 export interface GraphData {
   nodes: { id: string; label: string; group?: string; title?: string }[];
   edges: { from: string; to: string; label: string; id?: string }[];
+  metrics?: {
+    cooperative: string;
+    guarantors: string;
+    cashFlow: string;
+  };
 }
 
 import neo4j, { type Driver } from "neo4j-driver";
@@ -20,7 +25,7 @@ export class Neo4jConnection {
     }
   }
 
-  public async getGraphData(_phoneNumber: string): Promise<GraphData> {
+  public async getGraphData(phoneNumber: string): Promise<GraphData> {
     const mockData = {
       nodes: [
         {
@@ -48,21 +53,136 @@ export class Neo4jConnection {
         { from: "guarantor_1", to: "farmer_1", label: "VOUCHED_BY" },
         { from: "guarantor_2", to: "farmer_1", label: "VOUCHED_BY" },
       ],
+      metrics: {
+        cooperative: "Green Valley - 26 days/mo",
+        guarantors: "2 Active Members with Perfect Files",
+        cashFlow: "KES 18,000/mo",
+      },
     };
 
     if (!this.uri || !this.driver) {
       return mockData;
-    } else {
-      // In a real app, you would query Neo4j here.
-      // For the prototype, since the database is empty, we still return the mock data
-      // to keep the frontend functional, while ensuring the driver connects successfully.
-      try {
-        await this.driver.getServerInfo(); // Test connection
-        return mockData;
-      } catch (err) {
-        console.error("Neo4j connection error:", err);
+    }
+
+    try {
+      // Test connection
+      await this.driver.getServerInfo();
+
+      const session = this.driver.session();
+      const cypherQuery = `
+        MATCH (f:Farmer {phone: $phone})
+        OPTIONAL MATCH (f)-[r1:MEMBER_OF]->(c:Cooperative)
+        OPTIONAL MATCH (g:Guarantor)-[r2:VOUCHED_BY]->(f)
+        OPTIONAL MATCH (f)-[r3:TRANSACTED_WITH]->(a:Agrovet)
+        RETURN f, r1, c, g, r2, a, r3
+      `;
+
+      const result = await session.run(cypherQuery, { phone: phoneNumber });
+      await session.close();
+
+      if (result.records.length === 0) {
+        // Fallback to mock data if no records found
         return mockData;
       }
+
+      const nodesMap = new Map<
+        string,
+        { id: string; label: string; group?: string; title?: string }
+      >();
+      const edgesMap = new Map<
+        string,
+        { id?: string; from: string; to: string; label: string }
+      >();
+      let coopName = "Unknown";
+      let guarantorCount = 0;
+
+      for (const record of result.records) {
+        const f = record.get("f");
+        if (f) {
+          nodesMap.set(f.identity.toString(), {
+            id: f.identity.toString(),
+            label: `Farmer: ${f.properties.name || "Unknown"}`,
+            group: "farmer",
+            title: f.properties.phone,
+          });
+        }
+
+        const c = record.get("c");
+        if (c) {
+          nodesMap.set(c.identity.toString(), {
+            id: c.identity.toString(),
+            label: `Coop: ${c.properties.name || "Unknown"}`,
+            group: "coop",
+          });
+          coopName = c.properties.name || "Unknown";
+        }
+
+        const g = record.get("g");
+        if (g) {
+          nodesMap.set(g.identity.toString(), {
+            id: g.identity.toString(),
+            label: `Guarantor: ${g.properties.name || "Unknown"}`,
+            group: "guarantor",
+            title: g.properties.phone,
+          });
+          guarantorCount++;
+        }
+
+        const a = record.get("a");
+        if (a) {
+          nodesMap.set(a.identity.toString(), {
+            id: a.identity.toString(),
+            label: `Agrovet: ${a.properties.name || "Unknown"}`,
+            group: "agrovet",
+          });
+        }
+
+        const r1 = record.get("r1");
+        if (r1) {
+          edgesMap.set(r1.identity.toString(), {
+            id: r1.identity.toString(),
+            from: r1.start.toString(),
+            to: r1.end.toString(),
+            label: r1.type,
+          });
+        }
+
+        const r2 = record.get("r2");
+        if (r2) {
+          edgesMap.set(r2.identity.toString(), {
+            id: r2.identity.toString(),
+            from: r2.start.toString(),
+            to: r2.end.toString(),
+            label: r2.type,
+          });
+        }
+
+        const r3 = record.get("r3");
+        if (r3) {
+          edgesMap.set(r3.identity.toString(), {
+            id: r3.identity.toString(),
+            from: r3.start.toString(),
+            to: r3.end.toString(),
+            label: r3.type,
+          });
+        }
+      }
+
+      return {
+        nodes: Array.from(nodesMap.values()),
+        edges: Array.from(edgesMap.values()),
+        metrics: {
+          cooperative: `${coopName} - 26 days/mo`,
+          guarantors: `${guarantorCount} Active Members`,
+          cashFlow: "KES 18,000/mo", // Mocked cashflow as it's not in the graph query
+        },
+      };
+    } catch (err) {
+      console.warn(
+        "Neo4j query failed or DB offline, falling back to mock dataset.",
+        err,
+      );
+      return mockData;
     }
   }
 

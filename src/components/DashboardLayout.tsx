@@ -2,6 +2,7 @@
 
 import axios, { isAxiosError } from "axios";
 import { Loader2, Search } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +10,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { GraphData } from "@/lib/neo4j";
+import AgentLogPanel from "./AgentLogPanel";
 import DecisionCard from "./DecisionCard";
 import SiteLogo from "./SiteLogo";
-import TrustGraph from "./TrustGraph";
+
+const TrustGraph = dynamic(() => import("./TrustGraph"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-100 flex items-center justify-center text-muted-foreground bg-card border border-border rounded-lg">
+      <Loader2 className="w-6 h-6 animate-spin mr-2" />
+      Loading graph...
+    </div>
+  ),
+});
 
 interface EvaluationData {
   graph: GraphData;
@@ -132,10 +143,14 @@ export default function DashboardLayout() {
             </Card>
           </div>
           <div className="space-y-6">
-            <DecisionCard
-              brief={data?.repayment_confidence_brief}
-              isLoading={isEvaluating}
-            />
+            <AgentLogPanel isEvaluating={isEvaluating} />
+            {(!isEvaluating || data) && (
+              <DecisionCard
+                brief={data?.repayment_confidence_brief}
+                metrics={data?.graph?.metrics}
+                isLoading={isEvaluating}
+              />
+            )}
           </div>
         </div>
       </main>

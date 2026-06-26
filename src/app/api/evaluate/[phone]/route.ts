@@ -7,7 +7,24 @@ export async function GET(
   { params }: { params: Promise<{ phone: string }> },
 ) {
   try {
-    const phone = (await params).phone;
+    const rawPhone = (await params).phone;
+
+    // Parameter Sanitization
+    const decodedPhone = decodeURIComponent(rawPhone);
+    const phone = decodedPhone.replace(/[\s\-()]/g, "");
+
+    // Consent Security Check (SMS Opt-In Simulator)
+    const optedInFarmers = ["+254712345678", "+254722000111", "+254733222333"];
+    if (!optedInFarmers.includes(phone)) {
+      return NextResponse.json(
+        {
+          error: "Consent Pending",
+          message:
+            "Farmer has not replied 'YES' to the SMS opt-in request. Vetting cannot proceed without explicit consent under the Kenya Data Protection Act (2019).",
+        },
+        { status: 403 },
+      );
+    }
 
     // Get database connection
     const db = getConnection();
