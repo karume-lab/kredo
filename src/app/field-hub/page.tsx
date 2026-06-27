@@ -1,12 +1,30 @@
 "use client";
 
-import { CloudOff, RefreshCw, Signal, UserCircle } from "lucide-react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+import {
+  CheckCircle2,
+  ChevronRight,
+  CloudOff,
+  Leaf,
+  MapPin,
+  RefreshCw,
+  ShieldCheck,
+  Signal,
+  UserCircle,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatToE164 } from "@/lib/phone";
 
 export default function FieldHub() {
@@ -173,306 +191,441 @@ export default function FieldHub() {
     setIsLoading(false);
   };
 
+  const formVariants: Variants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+    exit: { opacity: 0, x: -20, transition: { duration: 0.2, ease: "easeIn" } },
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary flex flex-col">
-      {/* Top Status Bar */}
-      <header className="bg-card border-b border-border p-3 sticky top-0 z-50 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary">
-            <UserCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="font-bold text-sm leading-tight">Wanjiku Njeri</div>
-            <div className="text-xs text-muted-foreground">
-              Kiambu Rural Credit Unit
+    <div className="min-h-screen bg-linear-to-b from-background via-background/95 to-muted/20 text-foreground font-sans selection:bg-primary/20 selection:text-primary flex flex-col">
+      {/* Dynamic Status Bar - Glassmorphism */}
+      <header className="sticky top-0 z-50 px-4 py-3 bg-background/70 backdrop-blur-xl border-b border-white/5 shadow-sm">
+        <div className="flex items-center justify-between max-w-xl mx-auto">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-10 h-10 bg-linear-to-br from-primary/30 to-primary/10 border border-primary/20 rounded-full flex items-center justify-center text-primary shadow-inner">
+                <UserCircle className="w-6 h-6" />
+              </div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full animate-pulse" />
+            </div>
+            <div>
+              <div className="font-semibold text-sm tracking-tight text-foreground/90">
+                Wanjiku Njeri
+              </div>
+              <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+                <MapPin className="w-3 h-3" /> Kiambu Rural
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <Badge
-            variant="outline"
-            className="text-[10px] bg-green-500/10 text-green-500 border-green-500/20 px-1.5 py-0"
-          >
-            <Signal className="w-3 h-3 mr-1 inline" /> ONLINE
-          </Badge>
-          <div className="text-[10px] font-mono text-muted-foreground">
-            Node: Neo4j-Aura-04
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] font-medium text-green-500">
+              <Signal className="w-3 h-3" /> ONLINE
+            </div>
+            <div className="text-[10px] font-mono text-muted-foreground/70">
+              Aura-04
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 pb-24 overflow-y-auto">
-        {hasCachedData && (
-          <Alert
-            className="mb-4 bg-secondary/10 border-secondary/20 text-secondary cursor-pointer"
-            onClick={handleSync}
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            <AlertDescription className="flex items-center justify-between w-full">
-              <span>Offline audits pending sync</span>
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-7 text-xs border-secondary/50 hover:bg-secondary hover:text-secondary-foreground"
+      <main className="flex-1 px-4 py-6 max-w-xl mx-auto w-full flex flex-col overflow-x-hidden">
+        {/* Offline Alerts */}
+        <AnimatePresence>
+          {hasCachedData && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <Alert className="mb-6 bg-secondary/10 border-secondary/20 text-secondary-foreground shadow-lg backdrop-blur-md">
+                <RefreshCw className="w-4 h-4 text-secondary animate-spin-slow" />
+                <AlertDescription className="flex items-center justify-between w-full ml-2">
+                  <span className="font-medium text-sm">
+                    Offline audits pending sync
+                  </span>
+                  <Button
+                    size="sm"
+                    onClick={handleSync}
+                    className="h-8 text-xs bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-transform active:scale-95"
+                  >
+                    Sync Now
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            </motion.div>
+          )}
+
+          {offlineAlert && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <Alert
+                variant="destructive"
+                className="mb-6 bg-destructive/10 border-destructive/20 text-destructive shadow-lg backdrop-blur-md"
               >
-                Sync Now
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
+                <CloudOff className="w-4 h-4" />
+                <AlertDescription className="ml-2 font-medium">
+                  Device Offline: Audit cached to local storage.
+                </AlertDescription>
+              </Alert>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {offlineAlert && (
-          <Alert
-            variant="destructive"
-            className="mb-4 bg-destructive/10 border-destructive/20 text-destructive"
-          >
-            <CloudOff className="w-4 h-4 mr-2" />
-            <AlertDescription>
-              Device Offline: Farm audit cached locally to device storage.
-            </AlertDescription>
-          </Alert>
-        )}
-
-        <div className="mb-6 flex items-center justify-between px-2">
-          <div
-            className={`h-1 flex-1 rounded-full ${step >= 1 ? "bg-primary" : "bg-muted"} transition-colors`}
-          />
-          <div className="w-2" />
-          <div
-            className={`h-1 flex-1 rounded-full ${step >= 2 ? "bg-primary" : "bg-muted"} transition-colors`}
-          />
-          <div className="w-2" />
-          <div
-            className={`h-1 flex-1 rounded-full ${step >= 3 ? "bg-primary" : "bg-muted"} transition-colors`}
-          />
+        {/* Dynamic Stepper Progress */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2 px-1">
+            <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+              Step {step} of 3
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {step === 1
+                ? "Identity"
+                : step === 2
+                  ? "Footprint"
+                  : "Verification"}
+            </span>
+          </div>
+          <div className="flex gap-2 h-1.5">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className={`flex-1 rounded-full transition-all duration-500 ease-out ${
+                  step >= i
+                    ? "bg-linear-to-r from-primary to-primary/80"
+                    : "bg-muted"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl shadow-sm p-5 space-y-6">
-          {step === 1 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4">
-              <div>
-                <h2 className="text-lg font-bold text-primary mb-1">
-                  Step 1: Core KYC Identity Validation
-                </h2>
-                <p className="text-xs text-muted-foreground">
-                  Ensure details strictly match the physical National ID.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Farmer Legal Name</Label>
-                  <Input
-                    value={formData.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
-                    placeholder="e.g. John Doe"
-                    className="h-12 bg-background text-base"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>National ID Number</Label>
-                  <Input
-                    type="number"
-                    value={formData.national_id}
-                    onChange={(e) =>
-                      handleChange("national_id", e.target.value)
-                    }
-                    placeholder="e.g. 12345678"
-                    className="h-12 bg-background text-base"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Phone Number</Label>
-                  <Input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleChange("phone", e.target.value)}
-                    onBlur={handlePhoneBlur}
-                    placeholder="e.g. 0712345678"
-                    className="h-12 bg-background text-base"
-                  />
-                </div>
-              </div>
-
-              <Button
-                onClick={() => setStep(2)}
-                disabled={!validateStep1()}
-                className="w-full h-12 text-base font-semibold"
+        {/* Form Cards with Motion */}
+        <div className="flex-1 relative">
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="absolute inset-0"
               >
-                Continue to Assessment
-              </Button>
-            </div>
-          )}
+                <div className="bg-card/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-2xl ring-1 ring-black/5">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <UserCircle className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold tracking-tight text-foreground">
+                        Core KYC
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Verify physical National ID details.
+                      </p>
+                    </div>
+                  </div>
 
-          {step === 2 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4">
-              <div>
-                <h2 className="text-lg font-bold text-primary mb-1">
-                  Step 2: Value Chain & Agricultural Footprint
-                </h2>
-                <p className="text-xs text-muted-foreground">
-                  Select the primary economic drivers for this farmer.
-                </p>
-              </div>
+                  <div className="space-y-5">
+                    <div className="space-y-2 group">
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                        Farmer Legal Name
+                      </Label>
+                      <Input
+                        value={formData.name}
+                        onChange={(e) => handleChange("name", e.target.value)}
+                        placeholder="John Doe"
+                        className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base transition-all hover:bg-background/80 focus:bg-background rounded-xl"
+                      />
+                    </div>
+                    <div className="space-y-2 group">
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                        National ID
+                      </Label>
+                      <Input
+                        type="number"
+                        value={formData.national_id}
+                        onChange={(e) =>
+                          handleChange("national_id", e.target.value)
+                        }
+                        placeholder="12345678"
+                        className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base transition-all hover:bg-background/80 focus:bg-background rounded-xl"
+                      />
+                    </div>
+                    <div className="space-y-2 group">
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                        Phone Number
+                      </Label>
+                      <Input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleChange("phone", e.target.value)}
+                        onBlur={handlePhoneBlur}
+                        placeholder="0712345678"
+                        className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base transition-all hover:bg-background/80 focus:bg-background rounded-xl"
+                      />
+                    </div>
+                  </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Cooperative Association</Label>
-                  <select
-                    value={formData.coop_code}
-                    onChange={(e) => handleChange("coop_code", e.target.value)}
-                    className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Button
+                    onClick={() => setStep(2)}
+                    disabled={!validateStep1()}
+                    className="w-full h-14 mt-8 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-all active:scale-[0.98]"
                   >
-                    <option value="" disabled>
-                      Select Cooperative...
-                    </option>
-                    <option value="GDF-01">Githunguri Dairy Cooperative</option>
-                    <option value="LTG-02">Limuru Tea Growers</option>
-                    <option value="MCC-04">Murang'a Coffee Coop</option>
-                  </select>
+                    Continue <ChevronRight className="w-5 h-5 ml-1" />
+                  </Button>
                 </div>
-                <div className="space-y-2">
-                  <Label>Farm Acreage</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    value={formData.acreage}
-                    onChange={(e) => handleChange("acreage", e.target.value)}
-                    placeholder="e.g. 2.5"
-                    className="h-12 bg-background text-base"
-                  />
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="absolute inset-0"
+              >
+                <div className="bg-card/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-2xl ring-1 ring-black/5">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
+                      <Leaf className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold tracking-tight text-foreground">
+                        Agri-Footprint
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Economic drivers & value chain.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5">
+                    <div className="space-y-2">
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                        Cooperative Association
+                      </Label>
+                      <Select
+                        value={formData.coop_code}
+                        onValueChange={(val) => handleChange("coop_code", val)}
+                      >
+                        <SelectTrigger className="h-14">
+                          <SelectValue placeholder="Select Cooperative..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="GDF-01">
+                            Githunguri Dairy Cooperative
+                          </SelectItem>
+                          <SelectItem value="LTG-02">
+                            Limuru Tea Growers
+                          </SelectItem>
+                          <SelectItem value="MCC-04">
+                            Murang'a Coffee Coop
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2 group">
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                          Acreage
+                        </Label>
+                        <Input
+                          type="number"
+                          step="0.1"
+                          value={formData.acreage}
+                          onChange={(e) =>
+                            handleChange("acreage", e.target.value)
+                          }
+                          placeholder="2.5"
+                          className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
+                        />
+                      </div>
+                      <div className="space-y-2 group">
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                          Monthly (KES)
+                        </Label>
+                        <Input
+                          type="number"
+                          value={formData.revenue}
+                          onChange={(e) =>
+                            handleChange("revenue", e.target.value)
+                          }
+                          placeholder="45000"
+                          className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                        Primary Crop
+                      </Label>
+                      <Select
+                        value={formData.primary_crop}
+                        onValueChange={(val) =>
+                          handleChange("primary_crop", val)
+                        }
+                      >
+                        <SelectTrigger className="h-14">
+                          <SelectValue placeholder="Select Crop..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Dairy">Dairy</SelectItem>
+                          <SelectItem value="Tea">Tea</SelectItem>
+                          <SelectItem value="Coffee">Coffee</SelectItem>
+                          <SelectItem value="Maize">Maize</SelectItem>
+                          <SelectItem value="Horticulture">
+                            Horticulture
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 mt-8">
+                    <Button
+                      variant="outline"
+                      onClick={() => setStep(1)}
+                      className="w-20 h-14 rounded-xl border-white/10 hover:bg-white/5 text-muted-foreground hover:text-foreground"
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={() => setStep(3)}
+                      disabled={!validateStep2()}
+                      className="flex-1 h-14 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-all active:scale-[0.98]"
+                    >
+                      Continue <ChevronRight className="w-5 h-5 ml-1" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label>Primary Crop/Activity</Label>
-                  <select
-                    value={formData.primary_crop}
-                    onChange={(e) =>
-                      handleChange("primary_crop", e.target.value)
-                    }
-                    className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <option value="" disabled>
-                      Select Activity...
-                    </option>
-                    <option value="Dairy">Dairy</option>
-                    <option value="Tea">Tea</option>
-                    <option value="Coffee">Coffee</option>
-                    <option value="Maize">Maize</option>
-                    <option value="Horticulture">Horticulture</option>
-                  </select>
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div
+                key="step3"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="absolute inset-0"
+              >
+                <div className="bg-card/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-2xl ring-1 ring-black/5">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold tracking-tight text-foreground">
+                        Verification Audit
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Mandatory sign-offs for compliance.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-4 p-4 border border-white/5 bg-background/30 hover:bg-background/50 transition-colors rounded-2xl group">
+                      <Checkbox
+                        id="id_inspected"
+                        checked={formData.id_inspected}
+                        onCheckedChange={(c) =>
+                          handleChange("id_inspected", c as boolean)
+                        }
+                        className="mt-1"
+                      />
+                      <label
+                        htmlFor="id_inspected"
+                        className="text-sm text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors cursor-pointer"
+                      >
+                        "I verify that I have physically inspected the original,
+                        un-modified National ID Card of the borrower."
+                      </label>
+                    </div>
+
+                    <div className="flex items-start gap-4 p-4 border border-white/5 bg-background/30 hover:bg-background/50 transition-colors rounded-2xl group">
+                      <Checkbox
+                        id="visual_audit"
+                        checked={formData.visual_audit}
+                        onCheckedChange={(c) =>
+                          handleChange("visual_audit", c as boolean)
+                        }
+                        className="mt-1"
+                      />
+                      <label
+                        htmlFor="visual_audit"
+                        className="text-sm text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors cursor-pointer"
+                      >
+                        "I verify that I have conducted a visual audit of the
+                        farm acreage, crop health, and production yields listed
+                        above."
+                      </label>
+                    </div>
+
+                    <div className="flex items-start gap-4 p-4 border border-white/5 bg-background/30 hover:bg-background/50 transition-colors rounded-2xl group">
+                      <Checkbox
+                        id="consent_given"
+                        checked={formData.consent_given}
+                        onCheckedChange={(c) =>
+                          handleChange("consent_given", c as boolean)
+                        }
+                        className="mt-1"
+                      />
+                      <label
+                        htmlFor="consent_given"
+                        className="text-sm text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors cursor-pointer"
+                      >
+                        "I confirm that the farmer has verbally authorized a
+                        KREDO credit evaluation request."
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 mt-8">
+                    <Button
+                      variant="outline"
+                      onClick={() => setStep(2)}
+                      className="w-20 h-14 rounded-xl border-white/10 hover:bg-white/5 text-muted-foreground hover:text-foreground"
+                      disabled={isLoading}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!validateStep3() || isLoading}
+                      className="flex-1 h-14 text-sm font-bold tracking-tight rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-all active:scale-[0.98] overflow-hidden relative"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <RefreshCw className="w-4 h-4 animate-spin" />{" "}
+                          PROCESSING...
+                        </div>
+                      ) : (
+                        <span className="flex items-center justify-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" /> MERGE TO GRAPH
+                        </span>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label>Estimated Monthly Revenue (KES)</Label>
-                  <Input
-                    type="number"
-                    value={formData.revenue}
-                    onChange={(e) => handleChange("revenue", e.target.value)}
-                    placeholder="e.g. 45000"
-                    className="h-12 bg-background text-base"
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  className="flex-1 h-12 text-base"
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={() => setStep(3)}
-                  disabled={!validateStep2()}
-                  className="flex-1 h-12 text-base font-semibold"
-                >
-                  Final Verification
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4">
-              <div>
-                <h2 className="text-lg font-bold text-primary mb-1">
-                  Step 3: Signed Physical Verification
-                </h2>
-                <p className="text-xs text-muted-foreground">
-                  Mandatory legal accountability parameters under Kenya Data
-                  Protection Act.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <label className="flex items-start gap-3 p-4 border border-border rounded-lg bg-background cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.id_inspected}
-                    onChange={(e) =>
-                      handleChange("id_inspected", e.target.checked)
-                    }
-                    className="mt-1 w-5 h-5 accent-primary shrink-0"
-                  />
-                  <span className="text-sm text-foreground leading-relaxed">
-                    "I verify that I have physically inspected the original,
-                    un-modified National ID Card of the borrower."
-                  </span>
-                </label>
-
-                <label className="flex items-start gap-3 p-4 border border-border rounded-lg bg-background cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.visual_audit}
-                    onChange={(e) =>
-                      handleChange("visual_audit", e.target.checked)
-                    }
-                    className="mt-1 w-5 h-5 accent-primary shrink-0"
-                  />
-                  <span className="text-sm text-foreground leading-relaxed">
-                    "I verify that I have conducted a visual audit of the farm
-                    acreage, crop health, and production yields listed above."
-                  </span>
-                </label>
-
-                <label className="flex items-start gap-3 p-4 border border-border rounded-lg bg-background cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.consent_given}
-                    onChange={(e) =>
-                      handleChange("consent_given", e.target.checked)
-                    }
-                    className="mt-1 w-5 h-5 accent-primary shrink-0"
-                  />
-                  <span className="text-sm text-foreground leading-relaxed">
-                    "I confirm that the farmer has verbally authorized a KREDO
-                    credit evaluation request."
-                  </span>
-                </label>
-              </div>
-
-              <div className="flex gap-3 pt-4 border-t border-border">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(2)}
-                  className="h-14 px-6 text-base"
-                  disabled={isLoading}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!validateStep3() || isLoading}
-                  className="flex-1 h-14 text-base font-bold tracking-tight shadow-xl"
-                >
-                  {isLoading
-                    ? "PROCESSING..."
-                    : "[ UPLOAD & MERGE TO GRAPH NETWORK ]"}
-                </Button>
-              </div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </div>
