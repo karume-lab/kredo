@@ -65,7 +65,7 @@ export default function AuthPage() {
             <SiteLogo className="w-12 h-12 mb-4 rounded-xl shadow-lg" />
             <h1 className="text-2xl font-bold tracking-tight">KREDO</h1>
             <p className="text-sm text-muted-foreground mt-1 text-center">
-              Decentralized Risk Infrastructure Portal
+              Field-Agent Audited Integrity Networks
             </p>
           </div>
 
