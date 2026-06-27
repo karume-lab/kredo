@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kredo
+
+**Decentralized Risk Infrastructure for Last-Mile Agricultural Lending**
+
+Kredo is a modern web application designed to help underwrite thin-file borrowers, such as smallholder farmers, by mapping local economic footprints and querying decentralized trust networks. It uses index-free adjacency lookups to transform verifiable social collateral (e.g., historical milk deliveries, cooperative network relationships) into auditable risk profiles, unlocking access to credit.
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **UI & Styling:** React 19, Tailwind CSS v4, shadcn/ui
+- **Database:** Neo4j (Graph Database for index-free adjacency traversal)
+- **AI/Agents:** OpenAI (for evaluating borrower profiles and generating narrative summaries)
+- **Graph Visualization:** vis-network
+- **Linting & Formatting:** Biome
+
+## Features
+
+- **Trust Network Traversal:** Map out relationships, supply chain histories (like daily dairy deliveries), and cooperative affiliations using Neo4j graph databases.
+- **Dynamic Underwriting:** Evaluate thin-file borrowers instantly by relying on social and economic graphs instead of traditional Credit Reference Bureau (CRB) scores.
+- **Auditable Narrative Summaries:** Automatically generates contextual summaries of borrower risk using AI agents to assist loan officers.
+- **Interactive Dashboard:** Explore borrower networks via interactive graph visualizations.
+- **Admin & Ingestion APIs:** Programmatic endpoints to ingest new social/economic data into the graph.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v20+)
+- [Bun](https://bun.sh/) (Recommended), npm, yarn, or pnpm
+- A Neo4j Database instance (Local or AuraDB)
+- OpenAI API Key
+
+### Environment Variables
+
+Copy the example environment file and fill in your details:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env
+```
+
+Make sure to configure your Neo4j credentials and OpenAI API key.
+
+### Installation
+
+```bash
+bun install
+# or npm install / yarn install
+```
+
+### Running the Development Server
+
+```bash
+bun run dev
+# or npm run dev / yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/`: Next.js App Router containing views (`/dashboard`, `/admin`) and API routes (`/api/evaluate`, `/api/ingest`).
+- `src/components/`: Reusable UI components including complex graph visualizations.
+- `src/lib/`: Core backend logic including `neo4j.ts` for database connections and `agent.ts` for AI integrations.
 
-## Learn More
+## Code Quality
 
-To learn more about Next.js, take a look at the following resources:
+This project uses [Biome](https://biomejs.dev/) for fast linting and formatting.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Run the linter
+npm run lint
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Format the codebase
+npm run format
+```
