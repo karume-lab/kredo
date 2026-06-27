@@ -19,10 +19,7 @@ export default function WhatsAppSimulator() {
       id: "1",
       sender: "bot",
       text: "Welcome to KREDO Support. Type 'Score' to view your Trust Score or 'Improve' for actionable guides. You can also type 'YES' to consent to a pending loan evaluation.",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      timestamp: "",
     },
   ]);
   const [input, setInput] = useState("");
@@ -30,6 +27,16 @@ export default function WhatsAppSimulator() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMessages((prev) => [
+      {
+        ...prev[0],
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+      ...prev.slice(1),
+    ]);
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
