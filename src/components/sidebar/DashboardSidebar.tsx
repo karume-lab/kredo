@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  Activity,
   Database,
   FileText,
   LayoutDashboard,
+  MapPin,
   Search,
   Settings,
 } from "lucide-react";
@@ -18,45 +20,63 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const navMain = [
-  {
-    title: "Evaluation Terminal",
-    url: "/dashboard",
-    icon: Search,
-    isActive: true,
+const NAV_CONFIG = {
+  loan_officer: [
+    {
+      title: "Evaluation Terminal",
+      url: "/dashboard",
+      icon: Search,
+      isActive: true,
+    },
+    { title: "Field Verification", url: "/field-hub", icon: MapPin },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  ],
+  sacco_admin: [
+    {
+      title: "Portfolio Analytics",
+      url: "/dashboard/analytics",
+      icon: LayoutDashboard,
+      isActive: true,
+    },
+    { title: "Regulatory Reports", url: "/dashboard/reports", icon: FileText },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  ],
+  sys_admin: [
+    {
+      title: "System Diagnostics",
+      url: "/admin/dashboard",
+      icon: Activity,
+      isActive: true,
+    },
+    { title: "Graph Database", url: "/dashboard/graph", icon: Database },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  ],
+};
+
+const USER_CONFIG = {
+  loan_officer: {
+    name: "Wanjiku Njeri",
+    email: "wanjiku@kredo.co.ke",
+    avatar: "",
   },
-  {
-    title: "Portfolio Analytics",
-    url: "/dashboard/analytics",
-    icon: LayoutDashboard,
+  sacco_admin: {
+    name: "Gitau Njoroge",
+    email: "gitau@kredo.co.ke",
+    avatar: "",
   },
-  {
-    title: "Regulatory Reports",
-    url: "/dashboard/reports",
-    icon: FileText,
-  },
-  {
-    title: "Graph Database",
-    url: "/dashboard/graph",
-    icon: Database,
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
-  },
-];
+  sys_admin: { name: "Daniel Karume", email: "daniel@kredo.co.ke", avatar: "" },
+};
 
 export const DashboardSidebar = ({
+  role = "loan_officer",
   ...props
-}: React.ComponentProps<typeof Sidebar>) => {
+}: React.ComponentProps<typeof Sidebar> & { role?: string }) => {
   const { state } = useSidebar();
 
-  const user = {
-    name: "Wanjiku Njeri",
-    email: "wanjiku@kredo.africa",
-    avatar: "",
-  };
+  const user =
+    USER_CONFIG[role as keyof typeof USER_CONFIG] || USER_CONFIG.loan_officer;
+  const navMain =
+    NAV_CONFIG[role as keyof typeof NAV_CONFIG] || NAV_CONFIG.loan_officer;
 
   const isCollapsed = state === "collapsed";
 

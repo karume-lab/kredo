@@ -8,7 +8,7 @@ export async function generateRepaymentConfidenceBrief(
   const apiKey = process.env.FEATHERLESS_API_KEY;
   if (!apiKey) {
     // Return a realistic mock brief for demo purposes
-    return "Based on Kamau's strong repayment history with Green Valley Coop and solid backing by two reliable guarantors, the credit risk is assessed as low. The localized social network shows consistent mutual support and high social collateral. We confidently recommend approving the requested credit line with standard monitoring.";
+    return "Based on Kamau's high mobile money consistency (92%) and reliable digital input purchases via M-Pesa, the credit risk is assessed as low despite lacking traditional collateral. The farmer's stable dairy yields and low drought exposure further improve this assessment. This alternative data profile ensures a fairer evaluation for the farmer, recognizing their true economic reliability over restrictive land-title requirements.";
   }
 
   const baseUrl =
@@ -24,6 +24,10 @@ export async function generateRepaymentConfidenceBrief(
   const prompt = `
     You are an expert Credit Risk Analyst for KREDO, a relationship-based credit risk tool for agricultural SACCOs in Kenya.
     Based on the following JSON graph facts about a farmer and their network, write a 3-sentence plain-language "Repayment Confidence Brief".
+    
+    IMPORTANT: You must explicitly mention how alternative data (e.g., mobile money consistency, climate/drought exposure, digital input purchases, seasonal income, or peer networks) affects the score. 
+    Explain exactly what factors improved or weakened the assessment.
+    Briefly state why this recommendation is fairer and more inclusive for smallholder farmers (like women, youth, or PWDs) than relying only on traditional land collateral.
     
     Graph Data:
     ${JSON.stringify(graphData)}

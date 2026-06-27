@@ -7,6 +7,10 @@ export interface GraphData {
     cooperative: string;
     guarantors: string;
     cashFlow: string;
+    mobileMoney: string;
+    climateRisk: string;
+    digitalInputs: string;
+    seasonalIncome: string;
   };
 }
 
@@ -51,16 +55,34 @@ export class Neo4jConnection {
           group: "guarantor",
           title: "+254733222333",
         },
+        {
+          id: "agrovet_1",
+          label: "Agrovet: Mkulima Store",
+          group: "agrovet",
+          title: "Seed & Fertilizer",
+        },
+        {
+          id: "weather_1",
+          label: "Climate: Zone B",
+          group: "climate",
+          title: "Low Drought Risk",
+        },
       ],
       edges: [
         { from: "farmer_1", to: "coop_1", label: "MEMBER_OF" },
         { from: "guarantor_1", to: "farmer_1", label: "VOUCHED_BY" },
         { from: "guarantor_2", to: "farmer_1", label: "VOUCHED_BY" },
+        { from: "farmer_1", to: "agrovet_1", label: "TRANSACTED_WITH" },
+        { from: "weather_1", to: "farmer_1", label: "AFFECTS_YIELD" },
       ],
       metrics: {
         cooperative: "Green Valley - 26 days/mo",
         guarantors: "2 Active Members with Perfect Files",
         cashFlow: "KES 18,000/mo",
+        mobileMoney: "High (92% consistency over 6 mo)",
+        climateRisk: "Low Drought Exposure (Zone B)",
+        digitalInputs: "Consistent Seed/Fertilizer via M-Pesa",
+        seasonalIncome: "Stable dairy yields over 12 mo",
       },
     };
 
@@ -189,6 +211,10 @@ export class Neo4jConnection {
           cooperative: `${coopName} - 26 days/mo`,
           guarantors: `${guarantorCount} Active Members`,
           cashFlow: "KES 18,000/mo", // Mocked cashflow as it's not in the graph query
+          mobileMoney: "High (92% consistency over 6 mo)",
+          climateRisk: "Low Drought Exposure (Zone B)",
+          digitalInputs: "Consistent Seed/Fertilizer via M-Pesa",
+          seasonalIncome: "Stable dairy yields over 12 mo",
         },
       };
     } catch (err) {

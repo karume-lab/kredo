@@ -31,6 +31,10 @@ export default function DecisionCard({
     cooperative: string;
     guarantors: string;
     cashFlow: string;
+    mobileMoney?: string;
+    climateRisk?: string;
+    digitalInputs?: string;
+    seasonalIncome?: string;
   };
 }) {
   const [isAuditExpanded, setIsAuditExpanded] = useState(false);
@@ -203,6 +207,66 @@ export default function DecisionCard({
                     </tr>
                   </tbody>
                 </table>
+                {/* Alternative Risk Signals Matrix */}
+                <div className="p-4 bg-muted/10 border-t border-border">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
+                    Alternative Risk Signals Matrix
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {metrics.mobileMoney && (
+                      <div className="p-3 border border-border rounded-lg bg-background flex flex-col gap-1">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                          Mobile Money Consistency
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          <span className="text-sm font-medium">
+                            {metrics.mobileMoney}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {metrics.digitalInputs && (
+                      <div className="p-3 border border-border rounded-lg bg-background flex flex-col gap-1">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                          Digital Input Purchases
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          <span className="text-sm font-medium">
+                            {metrics.digitalInputs}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {metrics.climateRisk && (
+                      <div className="p-3 border border-border rounded-lg bg-background flex flex-col gap-1">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                          Climate / Drought Exposure
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <span className="text-sm font-medium">
+                            {metrics.climateRisk}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {metrics.seasonalIncome && (
+                      <div className="p-3 border border-border rounded-lg bg-background flex flex-col gap-1">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                          Seasonal Income
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          <span className="text-sm font-medium">
+                            {metrics.seasonalIncome}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
