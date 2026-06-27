@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-[#000000] text-primary p-8 font-mono">
+    <div className="min-h-screen bg-background text-primary p-8 font-mono">
       <header className="mb-8 border-b border-border pb-4 flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold text-primary tracking-tight">

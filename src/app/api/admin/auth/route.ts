@@ -1,16 +1,25 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { createSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { password } = body;
+    const { password, role, username, branch } = body;
 
     const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
     if (password === adminPassword) {
+      const payload = {
+        role: role || "loan_officer",
+        username: username || "Wanjiku Njeri",
+        branch: branch || "Kiambu Rural Credit Unit",
+      };
+
+      const token = await createSession(payload);
       const cookieStore = await cookies();
-      cookieStore.set("kredo_admin_session", "authenticated", {
+
+      cookieStore.set("kredo_admin_session", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -18,7 +27,12 @@ export async function POST(request: Request) {
         maxAge: 60 * 60 * 24, // 1 day
       });
 
-      return NextResponse.json({ success: true });
+      let redirectUrl = "/dashboard";
+      if (payload.role === "sacco_admin" || payload.role === "sys_admin") {
+        redirectUrl = "/admin/dashboard";
+      }
+
+      return NextResponse.json({ success: true, redirectUrl });
     }
 
     return NextResponse.json(
@@ -31,4 +45,14 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+}
+
+export async function DELETE() {
+  const cookieStore = await cookies();
+  cookieStore.set("kredo_admin_session", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    path: "/",
+  });
+  return NextResponse.json({ success: true });
 }

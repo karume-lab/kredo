@@ -48,8 +48,8 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#000000]">
-      <Card className="w-full max-w-md bg-[#000000] border-border rounded-sm">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <Card className="w-full max-w-md bg-card border-border rounded-sm">
         <CardHeader className="text-center pb-8">
           <CardTitle className="text-2xl font-bold text-primary">
             System Access
@@ -73,7 +73,7 @@ export default function AdminLogin() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-[#000000] border-border text-primary font-mono text-sm"
+                className="bg-background border-border text-primary font-mono text-sm"
                 placeholder="••••••••"
                 required
               />

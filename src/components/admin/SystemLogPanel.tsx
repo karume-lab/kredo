@@ -73,10 +73,10 @@ export function SystemLogPanel() {
         </Button>
       </div>
 
-      <div className="border border-border bg-[#050505] overflow-hidden">
+      <div className="border border-border bg-card overflow-hidden">
         <ScrollArea className="h-125 w-full">
           <Table>
-            <TableHeader className="bg-[#000000] sticky top-0 z-10 border-b border-border">
+            <TableHeader className="bg-muted sticky top-0 z-10 border-b border-border">
               <TableRow className="hover:bg-transparent">
                 <TableHead className="w-48 text-xs uppercase tracking-widest text-muted-foreground h-9">
                   Timestamp
@@ -93,7 +93,7 @@ export function SystemLogPanel() {
               {logs.map((log) => (
                 <TableRow
                   key={log.id}
-                  className="border-border/50 hover:bg-[#0a0a0a]"
+                  className="border-border/50 hover:bg-muted"
                 >
                   <TableCell className="w-48 text-muted-foreground align-top">
                     {new Date(log.timestamp).toLocaleTimeString()}

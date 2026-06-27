@@ -61,7 +61,7 @@ export function GraphTelemetry() {
         </Alert>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-[#000000] border-border rounded-none p-6 shadow-none">
+          <Card className="bg-card border-border rounded-none p-6 shadow-none">
             <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-2">
               Total Farmer Nodes
             </h3>
@@ -73,7 +73,7 @@ export function GraphTelemetry() {
             </div>
           </Card>
 
-          <Card className="bg-[#000000] border-border rounded-none p-6 shadow-none">
+          <Card className="bg-card border-border rounded-none p-6 shadow-none">
             <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-2">
               Vouched Connections
             </h3>
@@ -85,7 +85,7 @@ export function GraphTelemetry() {
             </div>
           </Card>
 
-          <Card className="bg-[#000000] border-border rounded-none p-6 shadow-none">
+          <Card className="bg-card border-border rounded-none p-6 shadow-none">
             <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-2">
               Cluster Status
             </h3>
