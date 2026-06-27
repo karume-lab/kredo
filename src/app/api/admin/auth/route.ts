@@ -5,16 +5,33 @@ import { createSession } from "@/lib/auth";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { password, role, username, branch } = body;
+    const { password, email } = body;
 
     const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
-    if (password === adminPassword) {
-      const payload = {
-        role: role || "loan_officer",
-        username: username || "Wanjiku Njeri",
-        branch: branch || "Kiambu Rural Credit Unit",
-      };
+    const USER_MAP: Record<
+      string,
+      { role: string; username: string; branch: string }
+    > = {
+      "wanjiku@kredo.co.ke": {
+        role: "loan_officer",
+        username: "Wanjiku Njeri",
+        branch: "Kiambu Rural Credit Unit",
+      },
+      "gitau@kredo.co.ke": {
+        role: "sacco_admin",
+        username: "Gitau Njoroge",
+        branch: "Head of Operations",
+      },
+      "daniel@kredo.co.ke": {
+        role: "sys_admin",
+        username: "Daniel Karume",
+        branch: "DevOps Engine",
+      },
+    };
+
+    if (password === adminPassword && email && USER_MAP[email]) {
+      const payload = USER_MAP[email];
 
       const token = await createSession(payload);
       const cookieStore = await cookies();
