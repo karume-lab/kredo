@@ -87,7 +87,7 @@ export default function SettingsPage() {
                   <Checkbox id="notify-risk" defaultChecked />
                   <Label
                     htmlFor="notify-risk"
-                    className="font-normal text-destructive font-medium"
+                    className="text-destructive font-medium"
                   >
                     Critical Alert: Notify me on high-risk portfolio deviations
                   </Label>

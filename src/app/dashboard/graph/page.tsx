@@ -19,7 +19,7 @@ export default function GraphDatabasePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
           {/* Query Editor */}
-          <Card className="shadow-sm flex flex-col border-border bg-card lg:col-span-1 h-full max-h-[600px]">
+          <Card className="shadow-sm flex flex-col border-border bg-card lg:col-span-1 h-full max-h-150">
             <CardHeader className="pb-4 border-b border-border/50 shrink-0">
               <CardTitle className="text-lg font-semibold flex items-center gap-2">
                 <Database className="w-5 h-5 text-primary" />
@@ -40,7 +40,7 @@ export default function GraphDatabasePage() {
           </Card>
 
           {/* Visualization Area */}
-          <Card className="shadow-sm border-border bg-card lg:col-span-2 h-full min-h-[500px] flex flex-col">
+          <Card className="shadow-sm border-border bg-card lg:col-span-2 h-full min-h-125 flex flex-col">
             <CardHeader className="pb-4 border-b border-border/50 shrink-0 flex flex-row items-center justify-between">
               <CardTitle className="text-lg font-semibold flex items-center gap-2">
                 <Network className="w-5 h-5 text-primary" />
@@ -51,7 +51,7 @@ export default function GraphDatabasePage() {
               </div>
             </CardHeader>
             <CardContent className="p-0 flex-1 relative bg-muted/10 flex items-center justify-center">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--border)_1px,transparent_1px)] [background-size:20px_20px] opacity-20"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--border)_1px,transparent_1px)] bg-size-[20px_20px] opacity-20"></div>
               <div className="flex flex-col items-center justify-center text-muted-foreground z-10 p-6 text-center">
                 <Network className="w-12 h-12 mb-4 opacity-20" />
                 <p className="font-medium text-foreground">
