@@ -14,7 +14,10 @@ export async function sendSMS({
     return { success: true, mock: true, message: "Mock SMS sent successfully" };
   }
 
-  const url = "https://api.africastalking.com/version1/messaging";
+  const url =
+    username === "sandbox"
+      ? "https://api.sandbox.africastalking.com/version1/messaging"
+      : "https://api.africastalking.com/version1/messaging";
 
   const params = new URLSearchParams();
   params.append("username", username);
