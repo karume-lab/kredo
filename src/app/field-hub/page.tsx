@@ -7,9 +7,11 @@ import {
   CloudOff,
   Leaf,
   MapPin,
+  Plus,
   RefreshCw,
   ShieldCheck,
   Signal,
+  Trash2,
   UserCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -38,10 +40,14 @@ export default function FieldHub() {
     name: "",
     national_id: "",
     phone: "",
-    coop_code: "",
-    acreage: "",
-    primary_crop: "",
-    revenue: "",
+    assets: [
+      {
+        coop_code: "",
+        acreage: "",
+        primary_crop: "",
+        revenue: "",
+      },
+    ],
     id_inspected: false,
     visual_audit: false,
     consent_given: false,
@@ -74,13 +80,12 @@ export default function FieldHub() {
 
   const validateStep1 = () =>
     !!(formData.name && formData.national_id && formData.phone);
-  const validateStep2 = () =>
-    !!(
-      formData.coop_code &&
-      formData.acreage &&
-      formData.primary_crop &&
-      formData.revenue
+  const validateStep2 = () => {
+    if (!formData.assets || formData.assets.length === 0) return false;
+    return formData.assets.every(
+      (a) => a.coop_code && a.acreage && a.primary_crop && a.revenue,
     );
+  };
   const validateStep3 = () =>
     !!(
       formData.id_inspected &&
@@ -118,10 +123,15 @@ export default function FieldHub() {
           name: "",
           national_id: "",
           phone: "",
-          coop_code: "",
-          acreage: "",
-          primary_crop: "",
-          revenue: "",
+          assets: [
+            {
+              id: crypto.randomUUID(),
+              coop_code: "",
+              acreage: "",
+              primary_crop: "",
+              revenue: "",
+            },
+          ],
           id_inspected: false,
           visual_audit: false,
           consent_given: false,
@@ -145,10 +155,15 @@ export default function FieldHub() {
         name: "",
         national_id: "",
         phone: "",
-        coop_code: "",
-        acreage: "",
-        primary_crop: "",
-        revenue: "",
+        assets: [
+          {
+            id: crypto.randomUUID(),
+            coop_code: "",
+            acreage: "",
+            primary_crop: "",
+            revenue: "",
+          },
+        ],
         id_inspected: false,
         visual_audit: false,
         consent_given: false,
@@ -411,88 +426,139 @@ export default function FieldHub() {
                     </div>
                   </div>
 
-                  <div className="space-y-5">
-                    <div className="space-y-2">
-                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                        Cooperative Association
-                      </Label>
-                      <Select
-                        value={formData.coop_code}
-                        onValueChange={(val) => handleChange("coop_code", val)}
+                  <div className="space-y-6">
+                    {formData.assets.map((asset, index) => (
+                      <div
+                        key={asset.id}
+                        className="space-y-5 p-4 border border-white/10 rounded-2xl relative bg-background/20"
                       >
-                        <SelectTrigger className="h-14">
-                          <SelectValue placeholder="Select Cooperative..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="GDF-01">
-                            Githunguri Dairy Cooperative
-                          </SelectItem>
-                          <SelectItem value="LTG-02">
-                            Limuru Tea Growers
-                          </SelectItem>
-                          <SelectItem value="MCC-04">
-                            Murang'a Coffee Coop
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                        {formData.assets.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2 text-muted-foreground hover:text-destructive h-8 w-8"
+                            onClick={() => {
+                              const newAssets = [...formData.assets];
+                              newAssets.splice(index, 1);
+                              setFormData({ ...formData, assets: newAssets });
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                        <div className="space-y-2">
+                          <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                            Cooperative Association
+                          </Label>
+                          <Select
+                            value={asset.coop_code}
+                            onValueChange={(val) => {
+                              const newAssets = [...formData.assets];
+                              newAssets[index].coop_code = val;
+                              setFormData({ ...formData, assets: newAssets });
+                            }}
+                          >
+                            <SelectTrigger className="h-14">
+                              <SelectValue placeholder="Select Cooperative..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="GDF-01">
+                                Githunguri Dairy Cooperative
+                              </SelectItem>
+                              <SelectItem value="LTG-02">
+                                Limuru Tea Growers
+                              </SelectItem>
+                              <SelectItem value="MCC-04">
+                                Murang'a Coffee Coop
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2 group">
-                        <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
-                          Acreage
-                        </Label>
-                        <Input
-                          type="number"
-                          step="0.1"
-                          value={formData.acreage}
-                          onChange={(e) =>
-                            handleChange("acreage", e.target.value)
-                          }
-                          placeholder="2.5"
-                          className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
-                        />
-                      </div>
-                      <div className="space-y-2 group">
-                        <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
-                          Monthly (KES)
-                        </Label>
-                        <Input
-                          type="number"
-                          value={formData.revenue}
-                          onChange={(e) =>
-                            handleChange("revenue", e.target.value)
-                          }
-                          placeholder="45000"
-                          className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
-                        />
-                      </div>
-                    </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2 group">
+                            <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                              Acreage
+                            </Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={asset.acreage}
+                              onChange={(e) => {
+                                const newAssets = [...formData.assets];
+                                newAssets[index].acreage = e.target.value;
+                                setFormData({ ...formData, assets: newAssets });
+                              }}
+                              placeholder="2.5"
+                              className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
+                            />
+                          </div>
+                          <div className="space-y-2 group">
+                            <Label className="text-xs uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                              Monthly (KES)
+                            </Label>
+                            <Input
+                              type="number"
+                              value={asset.revenue}
+                              onChange={(e) => {
+                                const newAssets = [...formData.assets];
+                                newAssets[index].revenue = e.target.value;
+                                setFormData({ ...formData, assets: newAssets });
+                              }}
+                              placeholder="45000"
+                              className="h-14 bg-background/50 backdrop-blur-sm border-white/10 text-base rounded-xl"
+                            />
+                          </div>
+                        </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                        Primary Crop
-                      </Label>
-                      <Select
-                        value={formData.primary_crop}
-                        onValueChange={(val) =>
-                          handleChange("primary_crop", val)
-                        }
-                      >
-                        <SelectTrigger className="h-14">
-                          <SelectValue placeholder="Select Crop..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Dairy">Dairy</SelectItem>
-                          <SelectItem value="Tea">Tea</SelectItem>
-                          <SelectItem value="Coffee">Coffee</SelectItem>
-                          <SelectItem value="Maize">Maize</SelectItem>
-                          <SelectItem value="Horticulture">
-                            Horticulture
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                            Primary Crop
+                          </Label>
+                          <Select
+                            value={asset.primary_crop}
+                            onValueChange={(val) => {
+                              const newAssets = [...formData.assets];
+                              newAssets[index].primary_crop = val;
+                              setFormData({ ...formData, assets: newAssets });
+                            }}
+                          >
+                            <SelectTrigger className="h-14">
+                              <SelectValue placeholder="Select Crop..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Dairy">Dairy</SelectItem>
+                              <SelectItem value="Tea">Tea</SelectItem>
+                              <SelectItem value="Coffee">Coffee</SelectItem>
+                              <SelectItem value="Maize">Maize</SelectItem>
+                              <SelectItem value="Horticulture">
+                                Horticulture
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      variant="outline"
+                      className="w-full border-dashed border-2 border-white/20 hover:border-white/40 h-14 rounded-xl"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          assets: [
+                            ...formData.assets,
+                            {
+                              coop_code: "",
+                              acreage: "",
+                              primary_crop: "",
+                              revenue: "",
+                            },
+                          ],
+                        })
+                      }
+                    >
+                      <Plus className="w-4 h-4 mr-2" /> Add Another Asset
+                    </Button>
                   </div>
 
                   <div className="flex gap-3 mt-8">

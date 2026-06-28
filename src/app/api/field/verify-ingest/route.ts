@@ -6,26 +6,16 @@ export async function POST(req: Request) {
   const t0 = performance.now();
   try {
     const body = await req.json();
-    const {
-      phone,
-      national_id,
-      name,
-      coop_code,
-      acreage,
-      primary_crop,
-      revenue,
-      officer_name,
-    } = body;
+    const { phone, national_id, name, assets, officer_name } = body;
 
     // Validate required fields
     if (
       !phone ||
       !national_id ||
       !name ||
-      !coop_code ||
-      !acreage ||
-      !primary_crop ||
-      !revenue ||
+      !assets ||
+      !Array.isArray(assets) ||
+      assets.length === 0 ||
       !officer_name
     ) {
       return NextResponse.json(
@@ -54,19 +44,27 @@ export async function POST(req: Request) {
           f.createdAt = datetime(),
           f.isConsented = false
         SET
-          f.acreage = toFloat($acreage),
-          f.primaryCrop = $primary_crop,
-          f.monthlyRevenue = toFloat($revenue),
           f.isFieldAudited = true,
           f.verifiedBy = $officer_name,
           f.verifiedAt = datetime(),
           f.lastUpdated = datetime()
 
-        MERGE (c:Cooperative {code: $coop_code})
+        WITH f
+        UNWIND $assets AS asset
         
+        MERGE (c:Cooperative {code: asset.coop_code})
+        
+        CREATE (a:Asset {
+          acreage: toFloat(asset.acreage),
+          primaryCrop: asset.primary_crop,
+          monthlyRevenue: toFloat(asset.revenue),
+          createdAt: datetime()
+        })
+        
+        MERGE (f)-[:OWNS]->(a)
+        MERGE (a)-[:ASSOCIATED_WITH]->(c)
         MERGE (f)-[r:MEMBER_OF]->(c)
-        SET 
-          r.lastUpdated = datetime()
+        SET r.lastUpdated = datetime()
       `;
 
       await session.executeWrite((tx) =>
@@ -74,11 +72,13 @@ export async function POST(req: Request) {
           phone: formattedPhone,
           name: String(name),
           national_id: String(national_id),
-          acreage: parseFloat(String(acreage)),
-          primary_crop: String(primary_crop),
-          revenue: parseFloat(String(revenue)),
           officer_name: String(officer_name),
-          coop_code: String(coop_code),
+          assets: assets.map((a: Record<string, unknown>) => ({
+            coop_code: String(a.coop_code),
+            acreage: parseFloat(String(a.acreage)),
+            primary_crop: String(a.primary_crop),
+            revenue: parseFloat(String(a.revenue)),
+          })),
         }),
       );
     } finally {
