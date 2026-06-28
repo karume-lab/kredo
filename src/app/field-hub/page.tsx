@@ -42,6 +42,7 @@ export default function FieldHub() {
     phone: "",
     assets: [
       {
+        id: "initial-asset",
         coop_code: "",
         acreage: "",
         primary_crop: "",
@@ -548,6 +549,7 @@ export default function FieldHub() {
                           assets: [
                             ...formData.assets,
                             {
+                              id: crypto.randomUUID(),
                               coop_code: "",
                               acreage: "",
                               primary_crop: "",
