@@ -28,6 +28,11 @@ export async function POST(request: Request) {
         username: "Daniel Karume",
         branch: "DevOps Engine",
       },
+      "kamau@kredo.co.ke": {
+        role: "field_agent",
+        username: "Kamau N.",
+        branch: "Field Operations",
+      },
     };
 
     if (password === adminPassword && email && USER_MAP[email]) {
@@ -47,6 +52,8 @@ export async function POST(request: Request) {
       let redirectUrl = "/dashboard";
       if (payload.role === "sacco_admin" || payload.role === "sys_admin") {
         redirectUrl = "/admin/dashboard";
+      } else if (payload.role === "field_agent") {
+        redirectUrl = "/field-hub";
       }
 
       return NextResponse.json({ success: true, redirectUrl });

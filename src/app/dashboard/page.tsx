@@ -10,7 +10,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import WhatsAppSimulator from "@/components/WhatsAppSimulator";
 import type { GraphData } from "@/lib/neo4j";
 
 const TrustGraph = dynamic(() => import("@/components/TrustGraph"), {
@@ -90,109 +89,87 @@ export default function DashboardLayout() {
   };
 
   return (
-    <>
-      <main className="flex-1 overflow-y-auto bg-background px-4 md:px-8 py-8 relative">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-6 flex justify-between items-end">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-1 tracking-tight">
-                Farmer Evaluation
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Analyze relationship-based credit risk for agricultural SACCOs.
-              </p>
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <form onSubmit={handleEvaluate} className="flex items-center gap-3">
-              <div className="relative flex-1 group max-w-xl">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <Input
-                  type="text"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="Enter farmer phone number (e.g., +254...)"
-                  className="w-full pl-12 bg-card border border-border focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm h-12 text-base rounded-xl transition-all"
-                />
-              </div>
-              <Button
-                type="submit"
-                disabled={isEvaluating}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 rounded-xl shadow-md font-medium transition-all hover:shadow-lg hover:-translate-y-0.5"
-              >
-                {isEvaluating ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                    Evaluating...
-                  </>
-                ) : (
-                  "Evaluate"
-                )}
-              </Button>
-            </form>
-          </div>
-
-          {error && (
-            <Alert
-              variant="destructive"
-              className="mb-8 bg-destructive/10 border-destructive/20 text-destructive shadow-sm"
-            >
-              <AlertDescription className="font-medium">
-                {error}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
-            <Card className="shadow-sm border-border bg-card xl:col-span-2">
-              <CardHeader className="pb-4 border-b border-border/50">
-                <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
-                  <Database className="w-5 h-5 text-primary" />
-                  Trust Graph
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="h-100">
-                  <TrustGraph graphData={data?.graph} />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <AgentLogPanel
-              isEvaluating={isEvaluating}
-              activeStatus={activeStatus}
-            />
-            {(!isEvaluating || data) && (
-              <DecisionCard
-                brief={data?.repayment_confidence_brief}
-                metrics={data?.graph?.metrics}
-                isLoading={isEvaluating}
-              />
-            )}
-          </div>
-        </div>
-      </main>
-
-      {/* Right Sidebar - WhatsApp Simulator */}
-      <aside className="w-95 shrink-0 bg-muted/30 border-l border-border p-6 flex flex-col h-full overflow-hidden shadow-inner">
-        <div className="mb-4 flex items-center justify-between">
+    <main className="flex-1 overflow-y-auto bg-background px-4 md:px-8 py-8 relative">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-6 flex justify-between items-end">
           <div>
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-secondary"></span>
-              Live Telemetry
-            </h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Farmer Communication Channel
+            <h2 className="text-3xl font-bold text-foreground mb-1 tracking-tight">
+              Farmer Evaluation
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              Analyze relationship-based credit risk for agricultural SACCOs.
             </p>
           </div>
         </div>
-        <div className="flex-1 w-full relative">
-          <WhatsAppSimulator />
+
+        <div className="mb-8">
+          <form onSubmit={handleEvaluate} className="flex items-center gap-3">
+            <div className="relative flex-1 group max-w-xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Input
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Enter farmer phone number (e.g., +254...)"
+                className="w-full pl-12 bg-card border border-border focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm h-12 text-base rounded-xl transition-all"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={isEvaluating}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 rounded-xl shadow-md font-medium transition-all hover:shadow-lg hover:-translate-y-0.5"
+            >
+              {isEvaluating ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  Evaluating...
+                </>
+              ) : (
+                "Evaluate"
+              )}
+            </Button>
+          </form>
         </div>
-      </aside>
-    </>
+
+        {error && (
+          <Alert
+            variant="destructive"
+            className="mb-8 bg-destructive/10 border-destructive/20 text-destructive shadow-sm"
+          >
+            <AlertDescription className="font-medium">{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+          <Card className="shadow-sm border-border bg-card xl:col-span-2">
+            <CardHeader className="pb-4 border-b border-border/50">
+              <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Database className="w-5 h-5 text-primary" />
+                Trust Graph
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="h-100">
+                <TrustGraph graphData={data?.graph} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <AgentLogPanel
+            isEvaluating={isEvaluating}
+            activeStatus={activeStatus}
+          />
+          {(!isEvaluating || data) && (
+            <DecisionCard
+              brief={data?.repayment_confidence_brief}
+              metrics={data?.graph?.metrics}
+              isLoading={isEvaluating}
+            />
+          )}
+        </div>
+      </div>
+    </main>
   );
 }

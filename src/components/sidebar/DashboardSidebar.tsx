@@ -28,7 +28,15 @@ const NAV_CONFIG = {
       icon: Search,
       isActive: true,
     },
-    { title: "Field Verification", url: "/field-hub", icon: MapPin },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  ],
+  field_agent: [
+    {
+      title: "Field Verification",
+      url: "/field-hub",
+      icon: MapPin,
+      isActive: true,
+    },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ],
   sacco_admin: [
@@ -57,6 +65,11 @@ const USER_CONFIG = {
   loan_officer: {
     name: "Wanjiku Njeri",
     email: "wanjiku@kredo.co.ke",
+    avatar: "",
+  },
+  field_agent: {
+    name: "Kamau N.",
+    email: "kamau@kredo.co.ke",
     avatar: "",
   },
   sacco_admin: {
