@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
+import { addConsent } from "@/lib/consentStore";
 
-export async function POST() {
-  // Simulate Neo4j node state update for consent
-  // This webhook would normally update the farmer's graph node status to "CONSENT_VERIFIED"
+export async function POST(req: Request) {
+  try {
+    const { phone } = await req.json();
+    if (phone) {
+      addConsent(phone);
+    }
+  } catch (e) {
+    console.error("Failed to parse consent payload", e);
+  }
 
   return NextResponse.json({
     success: true,

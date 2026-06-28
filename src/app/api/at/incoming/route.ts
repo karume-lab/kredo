@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { addConsent } from "@/lib/consentStore";
 import { classifyIntent } from "@/lib/nlp";
 import { sendSMS } from "@/lib/sms";
 
@@ -27,13 +28,7 @@ export async function POST(req: Request) {
     } else if (intent === "YES") {
       responseMessage =
         "Consent verified successfully. KREDO evaluation unlocked. Your loan officer will contact you shortly.";
-      try {
-        await fetch(new URL("/api/consent/confirm", req.url).toString(), {
-          method: "POST",
-        });
-      } catch (err) {
-        console.error("Failed to notify consent endpoint", err);
-      }
+      addConsent(from);
     } else {
       responseMessage =
         "Welcome to KREDO. Try replying with 'Score', 'Improve', or 'YES' if you have a pending evaluation request.";

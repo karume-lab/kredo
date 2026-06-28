@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { generateRepaymentConfidenceBrief } from "@/lib/agent";
+import { hasConsent } from "@/lib/consentStore";
 import { getConnection } from "@/lib/neo4j";
+import { sendSMS } from "@/lib/sms";
 
 export async function GET(
   _request: Request,
@@ -29,19 +31,25 @@ export async function GET(
 
           // 2. Consent validation
           sendEvent("status", "Consent");
-          const optedInFarmers = [
-            "+254712345678",
-            "+254722000111",
-            "+254733222333",
-          ];
 
-          if (!optedInFarmers.includes(phone)) {
+          if (!hasConsent(phone)) {
+            // Dispatch the consent SMS
+            try {
+              await sendSMS({
+                to: phone,
+                message:
+                  "KREDO: A loan officer is requesting to evaluate your credit limit. Reply 'YES' to consent to this evaluation.",
+              });
+            } catch (smsError) {
+              console.error("Failed to send consent SMS:", smsError);
+            }
+
             sendEvent(
               "error",
               JSON.stringify({
                 error: "Consent Pending",
                 message:
-                  "Farmer has not replied 'YES' to the SMS opt-in request. Vetting cannot proceed without explicit consent under the Kenya Data Protection Act (2019).",
+                  "Farmer has not replied 'YES' to the SMS opt-in request. Vetting cannot proceed without explicit consent under the Kenya Data Protection Act (2019). A consent request SMS has been sent.",
               }),
             );
             controller.close();
