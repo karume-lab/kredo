@@ -5,8 +5,9 @@ export async function sendSMS({
   to: string;
   message: string;
 }) {
-  const apiKey = process.env.AT_API_KEY || process.env.FEATHERLESS_API_KEY;
+  const apiKey = process.env.AT_API_KEY;
   const username = process.env.AT_USERNAME || "sandbox";
+  const shortcode = process.env.AT_SHORTCODE || "42623";
 
   if (!apiKey) {
     console.warn("No AT_API_KEY provided. Mocking SMS send.");
@@ -19,7 +20,7 @@ export async function sendSMS({
   params.append("username", username);
   params.append("to", to);
   params.append("message", message);
-  params.append("from", "KREDO_MESS");
+  params.append("from", shortcode);
 
   try {
     const response = await fetch(url, {
